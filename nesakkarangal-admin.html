@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Nesakkarangal — Admin Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --teal:#0D5C5C;--td:#083A3A;--tm:#1A7A7A;--tl:#D4EDED;--tp:#EEF8F8;
+  --amber:#C8780A;--al:#F5C040;--ap:#FEF3DC;
+  --terra:#B84C2A;--trl:#FAE0D8;
+  --sage:#3F7052;--sl:#CBE8D4;
+  --purple:#5E4A8A;--pl:#EDE8F8;
+  --red:#C0392B;--rl:#FDECEA;
+  --bg:#F2F6F6;--card:#FFFFFF;
+  --t1:#091A1A;--t2:#1E3A3A;--t3:#5A7A7A;--t4:#8AACAC;
+  --bdr:#C4DADA;--shadow:rgba(8,58,58,.10);
+  --sidebar:#0A2A2A;--sidebar-hover:#143636;--sidebar-active:#0D5C5C;
+  --fd:'Lora',serif;--fb:'Outfit',sans-serif;
+  --r:10px;--rs:6px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-size:15px}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);display:flex;overflow:hidden}
+
+/* ── SIDEBAR ─────────────────────────────────────── */
+.sidebar{
+  width:220px;flex-shrink:0;background:var(--sidebar);
+  display:flex;flex-direction:column;height:100vh;
+  position:sticky;top:0;overflow-y:auto;
+}
+.sb-brand{padding:1.3rem 1.2rem 1rem;border-bottom:1px solid rgba(255,255,255,.07)}
+.sb-logo{font-family:var(--fd);font-size:1.05rem;font-weight:600;color:#fff;line-height:1.2}
+.sb-logo span{color:var(--al)}
+.sb-sub{font-size:.65rem;color:#5a9090;font-style:italic;margin-top:.2rem}
+.sb-badge{display:inline-block;background:var(--amber);color:#fff;font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:100px;margin-top:.4rem;letter-spacing:.04em;text-transform:uppercase}
+.sb-section{padding:.6rem 1rem .25rem;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#3a7070;margin-top:.5rem}
+.sb-item{
+  display:flex;align-items:center;gap:.65rem;
+  padding:.6rem 1rem;cursor:pointer;
+  font-size:.82rem;font-weight:500;color:#7aacac;
+  transition:background .15s,color .15s;border-radius:0;position:relative;
+}
+.sb-item:hover{background:var(--sidebar-hover);color:#c0dede}
+.sb-item.active{background:var(--sidebar-active);color:#fff}
+.sb-item.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--al);border-radius:0 2px 2px 0}
+.sb-item .ico{width:18px;text-align:center;font-size:.95rem;flex-shrink:0}
+.sb-item .badge{margin-left:auto;background:var(--amber);color:#fff;font-size:.6rem;font-weight:700;padding:.12rem .45rem;border-radius:100px}
+.sb-item .dot{width:7px;height:7px;border-radius:50%;background:var(--sage);flex-shrink:0;margin-left:auto}
+.sb-footer{margin-top:auto;padding:1rem 1.1rem;border-top:1px solid rgba(255,255,255,.07)}
+.sb-user{display:flex;align-items:center;gap:.6rem}
+.sb-avatar{width:30px;height:30px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff;flex-shrink:0}
+.sb-user-name{font-size:.78rem;font-weight:600;color:#c0dede}
+.sb-user-role{font-size:.65rem;color:#5a9090}
+
+/* ── MAIN ────────────────────────────────────────── */
+.main{flex:1;overflow-y:auto;height:100vh;display:flex;flex-direction:column}
+
+/* ── TOPBAR ──────────────────────────────────────── */
+.topbar{
+  background:var(--card);border-bottom:1px solid var(--bdr);
+  padding:.75rem 1.8rem;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;flex-shrink:0;
+}
+.topbar-left{display:flex;align-items:center;gap:1rem}
+.page-title{font-family:var(--fd);font-size:1.15rem;font-weight:600;color:var(--t1)}
+.page-crumb{font-size:.75rem;color:var(--t3)}
+.topbar-right{display:flex;align-items:center;gap:.75rem}
+.search-box{display:flex;align-items:center;gap:.5rem;background:var(--bg);border:1.5px solid var(--bdr);border-radius:100px;padding:.38rem .9rem;font-size:.82rem;color:var(--t3);width:200px}
+.search-box input{background:none;border:none;outline:none;font-size:.82rem;color:var(--t1);width:100%;font-family:var(--fb)}
+.notif-btn{width:32px;height:32px;border-radius:50%;background:var(--bg);border:1.5px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;position:relative}
+.notif-dot{position:absolute;top:2px;right:2px;width:7px;height:7px;border-radius:50%;background:var(--red)}
+
+/* ── CONTENT AREA ────────────────────────────────── */
+.content{padding:1.6rem 1.8rem;flex:1}
+
+/* ── STATS ROW ───────────────────────────────────── */
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:1.5rem}
+.stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:1.1rem 1.2rem;position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;right:-12px;top:-12px;width:70px;height:70px;border-radius:50%;opacity:.07}
+.stat-card.teal::after{background:var(--teal)}
+.stat-card.amber::after{background:var(--amber)}
+.stat-card.sage::after{background:var(--sage)}
+.stat-card.terra::after{background:var(--terra)}
+.stat-card.purple::after{background:var(--purple)}
+.stat-ico{font-size:1.4rem;margin-bottom:.5rem}
+.stat-n{font-family:var(--fd);font-size:1.75rem;font-weight:600;line-height:1;color:var(--t1)}
+.stat-l{font-size:.72rem;color:var(--t3);margin-top:.22rem;font-weight:500}
+.stat-chg{font-size:.68rem;font-weight:600;margin-top:.3rem}
+.stat-chg.up{color:var(--sage)}.stat-chg.dn{color:var(--red)}
+
+/* ── CARD ────────────────────────────────────────── */
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.2rem;border-bottom:1px solid var(--bdr)}
+.card-title{font-family:var(--fd);font-size:.95rem;font-weight:600}
+.card-body{padding:1.2rem}
+
+/* ── GRID ────────────────────────────────────────── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.g12{display:grid;grid-template-columns:1fr 2fr;gap:1.2rem}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:1.2rem}
+
+/* ── TABLE ───────────────────────────────────────── */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+th{padding:.6rem 1rem;text-align:left;font-size:.7rem;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;background:var(--tp);border-bottom:1px solid var(--bdr);white-space:nowrap}
+td{padding:.65rem 1rem;border-bottom:1px solid var(--bdr);color:var(--t2);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f7fcfc}
+.td-bold{font-weight:600;color:var(--t1)}
+.td-muted{color:var(--t3);font-size:.74rem}
+.td-actions{display:flex;gap:.4rem;align-items:center}
+
+/* ── BADGE / PILL ────────────────────────────────── */
+.pill{display:inline-block;padding:.2rem .65rem;border-radius:100px;font-size:.68rem;font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.p-active{background:var(--sl);color:var(--sage)}
+.p-pending{background:var(--ap);color:var(--amber)}
+.p-inactive{background:#eee;color:#888}
+.p-new{background:var(--tl);color:var(--teal)}
+.p-overdue{background:var(--rl);color:var(--red)}
+.p-edu{background:var(--tl);color:var(--teal)}
+.p-skill{background:var(--sl);color:var(--sage)}
+.p-biz{background:var(--ap);color:var(--amber)}
+.p-women{background:var(--pl);color:var(--purple)}
+.p-family{background:var(--trl);color:var(--terra)}
+
+/* ── BUTTONS ─────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:.35rem;padding:.42rem 1rem;border-radius:100px;font-size:.78rem;font-weight:500;border:none;transition:all .18s;cursor:pointer;font-family:var(--fb);white-space:nowrap}
+.btn-teal{background:var(--teal);color:#fff}.btn-teal:hover{background:var(--td)}
+.btn-amber{background:var(--amber);color:#fff}.btn-amber:hover{background:#a06008}
+.btn-outline{background:transparent;border:1.5px solid var(--bdr);color:var(--t2)}.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-ghost{background:var(--bg);border:1px solid var(--bdr);color:var(--t3)}.btn-ghost:hover{color:var(--t1)}
+.btn-red{background:var(--rl);color:var(--red);border:1px solid #f5c0bc}.btn-red:hover{background:var(--red);color:#fff}
+.btn-sm{padding:.3rem .7rem;font-size:.72rem}
+.btn-xs{padding:.2rem .55rem;font-size:.68rem}
+.btn-icon{width:28px;height:28px;border-radius:var(--rs);background:var(--bg);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:.82rem;cursor:pointer;transition:all .15s}
+.btn-icon:hover{background:var(--tl);border-color:var(--teal)}
+
+/* ── PROGRESS ────────────────────────────────────── */
+.pb-wrap{display:flex;align-items:center;gap:.6rem}
+.pb{flex:1;height:5px;border-radius:100px;background:var(--bdr);overflow:hidden}
+.pf{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--teal),var(--tm))}
+.pf.am{background:linear-gradient(90deg,var(--amber),var(--al))}
+.pf.sg{background:linear-gradient(90deg,var(--sage),#5aaa6a)}
+.pf.pp{background:linear-gradient(90deg,var(--purple),#8868c8)}
+.pb-pct{font-size:.7rem;font-weight:600;color:var(--t2);width:32px;text-align:right}
+
+/* ── MINI CHART (CSS bar) ────────────────────────── */
+.mini-bars{display:flex;align-items:flex-end;gap:3px;height:44px}
+.mini-bar{flex:1;border-radius:2px 2px 0 0;opacity:.85}
+
+/* ── FORM ELEMENTS ───────────────────────────────── */
+.fi,.fs{padding:.5rem .8rem;border:1.5px solid var(--bdr);border-radius:var(--rs);background:var(--card);font-family:var(--fb);font-size:.82rem;color:var(--t1)}
+.fi:focus,.fs:focus{outline:none;border-color:var(--teal)}
+.fl{display:block;font-size:.72rem;font-weight:600;color:var(--t3);margin-bottom:.28rem;letter-spacing:.03em}
+.fg{margin-bottom:.9rem}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+
+/* ── FILTER ROW ──────────────────────────────────── */
+.filter-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem}
+.filter-row .fs{padding:.4rem .75rem;font-size:.78rem}
+
+/* ── TABS ────────────────────────────────────────── */
+.tabs{display:flex;border-bottom:2px solid var(--bdr);margin-bottom:1.2rem}
+.tab{padding:.55rem 1.1rem;font-size:.82rem;font-weight:500;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;white-space:nowrap}
+.tab.active{color:var(--teal);border-bottom-color:var(--teal)}
+.tab:hover{color:var(--t1)}
+
+/* ── MODAL ───────────────────────────────────────── */
+.overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(4,20,20,.5);backdrop-filter:blur(4px);align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:1.8rem;max-width:520px;width:92%;max-height:90vh;overflow-y:auto;position:relative;animation:fu .25s ease}
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.modal-x{position:absolute;top:.8rem;right:.9rem;background:none;border:none;font-size:1.2rem;color:var(--t3);cursor:pointer}.modal-x:hover{color:var(--t1)}
+.modal-h{font-family:var(--fd);font-size:1.2rem;font-weight:600;margin-bottom:.2rem}
+.modal-sub{font-size:.78rem;color:var(--t3);margin-bottom:1.3rem}
+
+/* ── TOAST ───────────────────────────────────────── */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;background:var(--td);color:#fff;padding:.8rem 1.3rem;border-radius:var(--r);font-size:.84rem;font-weight:500;box-shadow:0 8px 28px rgba(0,0,0,.22);display:none;animation:fu .25s ease}
+.toast.show{display:block}
+
+/* ── ACTIVITY ITEM ───────────────────────────────── */
+.act-item{display:flex;gap:.75rem;align-items:flex-start;padding:.65rem 0;border-bottom:1px solid var(--bdr)}
+.act-item:last-child{border-bottom:none}
+.act-ico{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.act-text{flex:1}.act-t{font-size:.8rem;font-weight:500;color:var(--t1)}.act-s{font-size:.72rem;color:var(--t3);margin-top:.1rem}
+.act-time{font-size:.68rem;color:var(--t4)}
+
+/* ── SPONSOR DETAIL CARD ─────────────────────────── */
+.sp-detail{background:var(--tp);border:1px solid var(--tl);border-radius:var(--r);padding:1.1rem;margin-bottom:1rem}
+.sp-detail-row{display:flex;justify-content:space-between;align-items:center;font-size:.8rem;padding:.3rem 0;border-bottom:1px solid var(--tl)}
+.sp-detail-row:last-child{border-bottom:none}
+.sp-detail-l{color:var(--t3)}.sp-detail-v{font-weight:600;color:var(--t1)}
+
+/* ── KPI BAND ────────────────────────────────────── */
+.kpi-band{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-bottom:1.2rem}
+.kpi{background:var(--tp);border:1px solid var(--tl);border-radius:var(--rs);padding:.8rem 1rem;text-align:center}
+.kpi-n{font-family:var(--fd);font-size:1.4rem;font-weight:600;color:var(--teal)}
+.kpi-l{font-size:.68rem;color:var(--t3);margin-top:.15rem}
+
+/* ── TIMELINE ────────────────────────────────────── */
+.timeline{position:relative;padding-left:1.4rem}
+.timeline::before{content:'';position:absolute;left:.35rem;top:.4rem;bottom:.4rem;width:2px;background:var(--bdr)}
+.tl-item{position:relative;margin-bottom:1rem}
+.tl-item::before{content:'';position:absolute;left:-1.05rem;top:.35rem;width:8px;height:8px;border-radius:50%;background:var(--teal);border:2px solid #fff;box-shadow:0 0 0 1px var(--teal)}
+.tl-date{font-size:.68rem;color:var(--t3);margin-bottom:.15rem}
+.tl-text{font-size:.78rem;color:var(--t1)}
+
+/* ── PAGE VIEWS ──────────────────────────────────── */
+.view{display:none}.view.active{display:block}
+
+/* ── SCROLLBAR ───────────────────────────────────── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">Nesak<span>karangal</span></div>
+    <div class="sb-sub">nesakkarangal.org</div>
+    <div class="sb-badge">Admin Panel</div>
+  </div>
+
+  <div class="sb-section">Overview</div>
+  <div class="sb-item active" onclick="nav(this,'overview')"><span class="ico">🏠</span>Dashboard</div>
+  <div class="sb-item" onclick="nav(this,'activity')"><span class="ico">📋</span>Recent Activity<span class="badge">5</span></div>
+
+  <div class="sb-section">Sponsors</div>
+  <div class="sb-item" onclick="nav(this,'sponsors')"><span class="ico">❤️</span>All Sponsors</div>
+  <div class="sb-item" onclick="nav(this,'payments')"><span class="ico">💳</span>Payments<span class="badge">3</span></div>
+  <div class="sb-item" onclick="nav(this,'add-sponsor')"><span class="ico">➕</span>Add Sponsor</div>
+
+  <div class="sb-section">Programs</div>
+  <div class="sb-item" onclick="nav(this,'students')"><span class="ico">🎒</span>Student Sponsorship</div>
+  <div class="sb-item" onclick="nav(this,'penpal')"><span class="ico">✉️</span>Penpal Program</div>
+  <div class="sb-item" onclick="nav(this,'tuition')"><span class="ico">📖</span>Tuition Centres</div>
+  <div class="sb-item" onclick="nav(this,'sewing')"><span class="ico">🧵</span>Sewing & Skills</div>
+  <div class="sb-item" onclick="nav(this,'women')"><span class="ico">👩</span>Women's Groups</div>
+  <div class="sb-item" onclick="nav(this,'microloan')"><span class="ico">🌱</span>Micro-Loans</div>
+  <div class="sb-item" onclick="nav(this,'family')"><span class="ico">🏡</span>Family Support</div>
+
+  <div class="sb-section">Reports</div>
+  <div class="sb-item" onclick="nav(this,'reports')"><span class="ico">📊</span>Reports & Export</div>
+  <div class="sb-item" onclick="nav(this,'settings')"><span class="ico">⚙️</span>Settings</div>
+
+  <div class="sb-footer">
+    <div class="sb-user">
+      <div class="sb-avatar">A</div>
+      <div><div class="sb-user-name">Admin</div><div class="sb-user-role">Nesakkarangal Coord.</div></div>
+    </div>
+  </div>
+</aside>
+
+
+<!-- ═══════ MAIN ═══════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div>
+        <div class="page-title" id="topbar-title">Dashboard Overview</div>
+        <div class="page-crumb" id="topbar-crumb">Nesakkarangal Admin · Northern Sri Lanka</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="search-box">🔍<input type="text" placeholder="Search sponsors, projects…"/></div>
+      <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+      <button class="btn btn-teal btn-sm" onclick="showToast('Google Sheets sync initiated!')">⟳ Sync Sheets</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+
+  <!-- ═══ VIEW: DASHBOARD ═══ -->
+  <div class="view active" id="view-overview">
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card teal">
+        <div class="stat-ico">❤️</div>
+        <div class="stat-n">54</div>
+        <div class="stat-l">Total Sponsors</div>
+        <div class="stat-chg up">↑ 6 this month</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-ico">💰</div>
+        <div class="stat-n">CAD 8,240</div>
+        <div class="stat-l">Total Agreed</div>
+        <div class="stat-chg up">↑ CAD 1,100 vs last month</div>
+      </div>
+      <div class="stat-card sage">
+        <div class="stat-ico">✅</div>
+        <div class="stat-n">CAD 5,950</div>
+        <div class="stat-l">Amount Received</div>
+        <div class="stat-chg up">72% collection rate</div>
+      </div>
+      <div class="stat-card terra">
+        <div class="stat-ico">⏳</div>
+        <div class="stat-n">CAD 2,290</div>
+        <div class="stat-l">Pending / Balance</div>
+        <div class="stat-chg dn">3 overdue sponsors</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-ico">🌍</div>
+        <div class="stat-n">7</div>
+        <div class="stat-l">Countries</div>
+        <div class="stat-chg up">CA · UK · US · AU + 3</div>
+      </div>
+    </div>
+
+    <div class="g21" style="margin-bottom:1.2rem;">
+
+      <!-- Sponsors Summary Table -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Recent Sponsor Activity</div>
+          <button class="btn btn-outline btn-sm" onclick="nav(document.querySelector('.sb-item:nth-child(7)'),'sponsors')">View All →</button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>Sponsor ID</th><th>Name</th><th>Country</th><th>Project</th>
+              <th>Agreed</th><th>Received</th><th>Method</th><th>Status</th><th>Action</th>
+            </tr></thead>
+            <tbody>
+              <tr><td class="td-bold">SP-048</td><td>Kavitha Rajan</td><td>🍁 CA</td><td>Student Sponsorship</td><td>CAD 75</td><td class="td-bold" style="color:var(--sage)">CAD 75</td><td>E-Transfer</td><td><span class="pill p-active">Active</span></td><td><div class="td-actions"><div class="btn-icon" onclick="openSponsorModal('SP-048','Kavitha Rajan')">👁</div><div class="btn-icon">✏️</div></div></td></tr>
+              <tr><td class="td-bold">SP-047</td><td>Murugan Selva</td><td>🇬🇧 UK</td><td>Sewing Centre</td><td>GBP 40</td><td class="td-bold" style="color:var(--sage)">GBP 40</td><td>Bank Transfer</td><td><span class="pill p-active">Active</span></td><td><div class="td-actions"><div class="btn-icon" onclick="openSponsorModal('SP-047','Murugan Selva')">👁</div><div class="btn-icon">✏️</div></div></td></tr>
+              <tr><td class="td-bold">SP-046</td><td>Priya Thillai</td><td>🍁 CA</td><td>Women's Fund</td><td>CAD 50</td><td class="td-bold" style="color:var(--amber)">CAD 0</td><td>E-Transfer</td><td><span class="pill p-pending">Pending</span></td><td><div class="td-actions"><div class="btn-icon" onclick="openSponsorModal('SP-046','Priya Thillai')">👁</div><div class="btn-icon">✏️</div></div></td></tr>
+              <tr><td class="td-bold">SP-045</td><td>Siva Kumar</td><td>🇺🇸 US</td><td>Tuition Fund</td><td>USD 60</td><td class="td-bold" style="color:var(--sage)">USD 60</td><td>PayPal</td><td><span class="pill p-active">Active</span></td><td><div class="td-actions"><div class="btn-icon" onclick="openSponsorModal('SP-045','Siva Kumar')">👁</div><div class="btn-icon">✏️</div></div></td></tr>
+              <tr><td class="td-bold">SP-044</td><td>Ananthan Murugan</td><td>🍁 CA</td><td>Student Sponsorship</td><td>CAD 175</td><td class="td-bold" style="color:var(--amber)">CAD 125</td><td>E-Transfer</td><td><span class="pill p-pending">Pending</span></td><td><div class="td-actions"><div class="btn-icon" onclick="openSponsorModal('SP-044','Ananthan Murugan')">👁</div><div class="btn-icon">✏️</div></div></td></tr>
+              <tr><td class="td-bold">SP-043</td><td>Nithya Gopal</td><td>🇦🇺 AU</td><td>Micro-Loan Fund</td><td>AUD 80</td><td class="td-bold" style="color:var(--red)">AUD 0</td><td>Bank Transfer</td><td><span class="pill p-overdue">Overdue</span></td><td><div class="td-actions"><div class="btn-icon" onclick="openSponsorModal('SP-043','Nithya Gopal')">👁</div><div class="btn-icon">✏️</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Right column -->
+      <div style="display:flex;flex-direction:column;gap:1.2rem;">
+
+        <!-- Program Coverage -->
+        <div class="card">
+          <div class="card-head"><div class="card-title">Program Coverage</div></div>
+          <div class="card-body" style="padding:.9rem 1.1rem;">
+            <div style="margin-bottom:.7rem;">
+              <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.3rem;"><span>🎓 Education</span><span class="td-bold">22 sponsors</span></div>
+              <div class="pb-wrap"><div class="pb"><div class="pf" style="width:82%"></div></div><div class="pb-pct">82%</div></div>
+            </div>
+            <div style="margin-bottom:.7rem;">
+              <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.3rem;"><span>🧵 Sewing / Skills</span><span class="td-bold">14 sponsors</span></div>
+              <div class="pb-wrap"><div class="pb"><div class="pf sg" style="width:56%"></div></div><div class="pb-pct">56%</div></div>
+            </div>
+            <div style="margin-bottom:.7rem;">
+              <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.3rem;"><span>👩 Women Empowerment</span><span class="td-bold">9 sponsors</span></div>
+              <div class="pb-wrap"><div class="pb"><div class="pf pp" style="width:72%"></div></div><div class="pb-pct">72%</div></div>
+            </div>
+            <div style="margin-bottom:.7rem;">
+              <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.3rem;"><span>🌱 Micro-Business</span><span class="td-bold">35 sponsors</span></div>
+              <div class="pb-wrap"><div class="pb"><div class="pf am" style="width:60%"></div></div><div class="pb-pct">60%</div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.3rem;"><span>🏡 Family Support</span><span class="td-bold">14 sponsors</span></div>
+              <div class="pb-wrap"><div class="pb"><div class="pf" style="width:63%;background:linear-gradient(90deg,var(--terra),#d4896a)"></div></div><div class="pb-pct">63%</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending Actions -->
+        <div class="card">
+          <div class="card-head"><div class="card-title">⚠️ Pending Actions</div></div>
+          <div class="card-body" style="padding:.9rem 1.1rem;display:flex;flex-direction:column;gap:.6rem;">
+            <div style="background:var(--ap);border:1px solid #f0d080;border-radius:var(--rs);padding:.65rem .85rem;font-size:.78rem;"><strong style="color:var(--amber);">3 payments overdue</strong><div style="color:var(--t3);font-size:.71rem;margin-top:.15rem;">SP-043, SP-041, SP-039 — send reminders</div><button class="btn btn-amber btn-xs" style="margin-top:.4rem;" onclick="showToast('Reminder emails sent to 3 sponsors!')">Send Reminders</button></div>
+            <div style="background:var(--tl);border:1px solid var(--teal);border-radius:var(--rs);padding:.65rem .85rem;font-size:.78rem;"><strong style="color:var(--teal);">2 new sponsors</strong> awaiting approval<div style="color:var(--t3);font-size:.71rem;margin-top:.15rem;">SP-049, SP-050 registered this week</div><button class="btn btn-teal btn-xs" style="margin-top:.4rem;" onclick="nav(null,'sponsors')">Review Now</button></div>
+            <div style="background:var(--rl);border:1px solid #f0b0a8;border-radius:var(--rs);padding:.65rem .85rem;font-size:.78rem;"><strong style="color:var(--red);">1 project fully funded</strong> — close &amp; disburse<div style="color:var(--t3);font-size:.71rem;margin-top:.15rem;">Women's Seed Fund Vanni — Rs. 25,000 reached</div><button class="btn btn-outline btn-xs" style="margin-top:.4rem;" onclick="showToast('Project closure flow — coming soon!')">Mark Complete</button></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom row -->
+    <div class="g3">
+
+      <!-- Countries breakdown -->
+      <div class="card">
+        <div class="card-head"><div class="card-title">Sponsors by Country</div></div>
+        <div class="card-body" style="padding:.9rem 1.1rem;">
+          <div style="display:flex;flex-direction:column;gap:.55rem;">
+            <div style="display:flex;align-items:center;gap:.6rem;font-size:.8rem;"><span style="width:22px;">🍁</span><span style="flex:1">Canada</span><strong>28</strong><div class="pb" style="width:80px;"><div class="pf" style="width:85%"></div></div></div>
+            <div style="display:flex;align-items:center;gap:.6rem;font-size:.8rem;"><span style="width:22px;">🇬🇧</span><span style="flex:1">United Kingdom</span><strong>9</strong><div class="pb" style="width:80px;"><div class="pf" style="width:27%"></div></div></div>
+            <div style="display:flex;align-items:center;gap:.6rem;font-size:.8rem;"><span style="width:22px;">🇺🇸</span><span style="flex:1">United States</span><strong>7</strong><div class="pb" style="width:80px;"><div class="pf" style="width:21%"></div></div></div>
+            <div style="display:flex;align-items:center;gap:.6rem;font-size:.8rem;"><span style="width:22px;">🇦🇺</span><span style="flex:1">Australia</span><strong>4</strong><div class="pb" style="width:80px;"><div class="pf" style="width:12%"></div></div></div>
+            <div style="display:flex;align-items:center;gap:.6rem;font-size:.8rem;"><span style="width:22px;">🇱🇰</span><span style="flex:1">Sri Lanka</span><strong>3</strong><div class="pb" style="width:80px;"><div class="pf" style="width:9%"></div></div></div>
+            <div style="display:flex;align-items:center;gap:.6rem;font-size:.8rem;"><span style="width:22px;">🌍</span><span style="flex:1">Other</span><strong>3</strong><div class="pb" style="width:80px;"><div class="pf" style="width:9%"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly collections chart -->
+      <div class="card">
+        <div class="card-head"><div class="card-title">Monthly Collections (CAD equiv.)</div></div>
+        <div class="card-body" style="padding:.9rem 1.1rem;">
+          <div class="mini-bars">
+            <div class="mini-bar" style="background:var(--tl);height:32%"></div>
+            <div class="mini-bar" style="background:var(--tl);height:48%"></div>
+            <div class="mini-bar" style="background:var(--tl);height:38%"></div>
+            <div class="mini-bar" style="background:var(--tl);height:62%"></div>
+            <div class="mini-bar" style="background:var(--tl);height:55%"></div>
+            <div class="mini-bar" style="background:var(--tl);height:70%"></div>
+            <div class="mini-bar" style="background:var(--tl);height:58%"></div>
+            <div class="mini-bar" style="background:var(--tl);height:80%"></div>
+            <div class="mini-bar" style="background:var(--tl);height:72%"></div>
+            <div class="mini-bar" style="background:var(--teal);height:88%"></div>
+            <div class="mini-bar" style="background:var(--al);height:95%;opacity:.9"></div>
+            <div class="mini-bar" style="background:#ddd;height:40%"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--t3);margin-top:.4rem;">
+            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+          </div>
+          <div style="font-size:.75rem;color:var(--t3);margin-top:.7rem;">Nov 2025 best month — <strong style="color:var(--teal);">CAD 1,240</strong> collected</div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="card">
+        <div class="card-head"><div class="card-title">Recent Activity</div><button class="btn btn-ghost btn-sm" onclick="nav(null,'activity')">All →</button></div>
+        <div class="card-body" style="padding:.6rem 1.1rem;">
+          <div class="act-item"><div class="act-ico" style="background:var(--sl);">✅</div><div class="act-text"><div class="act-t">SP-048 payment confirmed</div><div class="act-s">Kavitha Rajan · CAD 75 · E-Transfer</div></div><div class="act-time">2h ago</div></div>
+          <div class="act-item"><div class="act-ico" style="background:var(--tl);">➕</div><div class="act-text"><div class="act-t">New sponsor registered</div><div class="act-s">SP-050 · Thanuja Nair · Canada</div></div><div class="act-time">5h ago</div></div>
+          <div class="act-item"><div class="act-ico" style="background:var(--ap);">⏰</div><div class="act-text"><div class="act-t">Payment overdue reminder</div><div class="act-s">SP-043 · Nithya Gopal · AUD 80</div></div><div class="act-time">1d ago</div></div>
+          <div class="act-item"><div class="act-ico" style="background:var(--sl);">🧵</div><div class="act-text"><div class="act-t">Sewing centre update</div><div class="act-s">Mullaithivu — 28 of 30 women enrolled</div></div><div class="act-time">2d ago</div></div>
+          <div class="act-item"><div class="act-ico" style="background:var(--pl);">📊</div><div class="act-text"><div class="act-t">Monthly report sent</div><div class="act-s">54 sponsors notified · Oct 2025</div></div><div class="act-time">3d ago</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ═══ VIEW: SPONSORS ═══ -->
+  <div class="view" id="view-sponsors">
+    <div class="filter-row">
+      <select class="fs" id="filter-country"><option>All Countries</option><option>🍁 Canada</option><option>🇬🇧 UK</option><option>🇺🇸 US</option><option>🇦🇺 Australia</option><option>🇱🇰 Sri Lanka</option></select>
+      <select class="fs" id="filter-project"><option>All Projects</option><option>Student Sponsorship</option><option>Penpal Program</option><option>Tuition Centre</option><option>Sewing Centre</option><option>Women's Fund</option><option>Micro-Loan</option><option>Family Support</option></select>
+      <select class="fs" id="filter-status"><option>All Status</option><option>Active</option><option>Pending</option><option>Overdue</option><option>Inactive</option></select>
+      <select class="fs" id="filter-currency"><option>All Currencies</option><option>CAD</option><option>USD</option><option>GBP</option><option>LKR</option><option>AUD</option></select>
+      <button class="btn btn-teal btn-sm" onclick="showToast('Filters applied!')">Apply</button>
+      <button class="btn btn-outline btn-sm" onclick="showToast('Filters cleared!')">Clear</button>
+      <button class="btn btn-amber btn-sm" style="margin-left:auto;" onclick="nav(null,'add-sponsor')">+ Add Sponsor</button>
+      <button class="btn btn-outline btn-sm" onclick="showToast('CSV export generated!')">⬇ Export CSV</button>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">All Sponsors <span style="font-size:.78rem;color:var(--t3);font-family:var(--fb);font-weight:400;margin-left:.5rem;">54 total · 48 active · 3 pending · 3 overdue</span></div>
+        <div style="display:flex;gap:.5rem;">
+          <button class="btn btn-ghost btn-sm" onclick="showToast('Send bulk reminder emails!')">📧 Bulk Email</button>
+          <button class="btn btn-ghost btn-sm" onclick="showToast('Google Sheets synced!')">⟳ Sync</button>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th><input type="checkbox" style="cursor:pointer;"/></th>
+            <th>Sponsor ID</th><th>Name</th><th>Country</th><th>Project ID</th><th>Project Name</th>
+            <th>Currency</th><th>Agreed</th><th>Received</th><th>Allocated</th><th>Balance</th><th>Pending</th>
+            <th>Method</th><th>Link / Ref</th><th>Status</th><th>Since</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="sponsors-tbody">
+            <!-- Dynamically generated below -->
+          </tbody>
+        </table>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.2rem;border-top:1px solid var(--bdr);font-size:.76rem;color:var(--t3);">
+        <span>Showing 1–10 of 54 sponsors</span>
+        <div style="display:flex;gap:.4rem;">
+          <button class="btn btn-ghost btn-xs">← Prev</button>
+          <button class="btn btn-teal btn-xs">1</button>
+          <button class="btn btn-ghost btn-xs">2</button>
+          <button class="btn btn-ghost btn-xs">3</button>
+          <button class="btn btn-ghost btn-xs">Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ VIEW: PAYMENTS ═══ -->
+  <div class="view" id="view-payments">
+    <div class="kpi-band">
+      <div class="kpi"><div class="kpi-n" style="color:var(--sage);">CAD 5,950</div><div class="kpi-l">Total Received</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--amber);">CAD 2,290</div><div class="kpi-l">Total Pending</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--red);">CAD 480</div><div class="kpi-l">Overdue (3 sponsors)</div></div>
+      <div class="kpi"><div class="kpi-n">72%</div><div class="kpi-l">Collection Rate</div></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab(this,'pay-all')">All Payments</div>
+      <div class="tab" onclick="switchTab(this,'pay-pending')">⏳ Pending (6)</div>
+      <div class="tab" onclick="switchTab(this,'pay-overdue')">🔴 Overdue (3)</div>
+      <div class="tab" onclick="switchTab(this,'pay-done')">✅ Confirmed</div>
+    </div>
+
+    <div class="card" id="pay-all">
+      <div class="card-head"><div class="card-title">All Payment Records</div><button class="btn btn-amber btn-sm" onclick="showToast('Payment reminder sent to all pending sponsors!')">📧 Send All Reminders</button></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Sponsor ID</th><th>Name</th><th>Country</th><th>Project</th><th>Currency</th><th>Agreed</th><th>Received</th><th>Balance</th><th>Pending</th><th>Method</th><th>Last Payment</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td class="td-bold">SP-048</td><td>Kavitha Rajan</td><td>🍁 CA</td><td>Student Sponsorship</td><td>CAD</td><td>75</td><td style="color:var(--sage);font-weight:600;">75</td><td>0</td><td>0</td><td>E-Transfer</td><td class="td-muted">Nov 1, 2025</td><td><span class="pill p-active">Confirmed</span></td><td><div class="td-actions"><button class="btn btn-ghost btn-xs" onclick="showToast('Receipt sent to Kavitha!')">🧾 Receipt</button></div></td></tr>
+            <tr><td class="td-bold">SP-047</td><td>Murugan Selva</td><td>🇬🇧 UK</td><td>Sewing Centre</td><td>GBP</td><td>40</td><td style="color:var(--sage);font-weight:600;">40</td><td>0</td><td>0</td><td>Bank Transfer</td><td class="td-muted">Oct 28, 2025</td><td><span class="pill p-active">Confirmed</span></td><td><div class="td-actions"><button class="btn btn-ghost btn-xs" onclick="showToast('Receipt sent!')">🧾 Receipt</button></div></td></tr>
+            <tr><td class="td-bold">SP-046</td><td>Priya Thillai</td><td>🍁 CA</td><td>Women's Fund</td><td>CAD</td><td>50</td><td style="color:var(--amber);font-weight:600;">0</td><td style="color:var(--terra);">50</td><td style="color:var(--terra);">50</td><td>E-Transfer</td><td class="td-muted">—</td><td><span class="pill p-pending">Pending</span></td><td><div class="td-actions"><button class="btn btn-amber btn-xs" onclick="showToast('Reminder sent to Priya!')">📧 Remind</button><button class="btn btn-teal btn-xs" onclick="openPayModal('SP-046','Priya Thillai','CAD 50')">✓ Mark Paid</button></div></td></tr>
+            <tr><td class="td-bold">SP-044</td><td>Ananthan Murugan</td><td>🍁 CA</td><td>Multiple</td><td>CAD</td><td>175</td><td style="color:var(--amber);font-weight:600;">125</td><td style="color:var(--terra);">50</td><td style="color:var(--terra);">50</td><td>E-Transfer</td><td class="td-muted">Oct 10, 2025</td><td><span class="pill p-pending">Pending</span></td><td><div class="td-actions"><button class="btn btn-amber btn-xs" onclick="showToast('Reminder sent!')">📧 Remind</button><button class="btn btn-teal btn-xs" onclick="openPayModal('SP-044','Ananthan Murugan','CAD 50')">✓ Mark Paid</button></div></td></tr>
+            <tr><td class="td-bold">SP-043</td><td>Nithya Gopal</td><td>🇦🇺 AU</td><td>Micro-Loan</td><td>AUD</td><td>80</td><td style="color:var(--red);font-weight:600;">0</td><td style="color:var(--red);">80</td><td style="color:var(--red);">80</td><td>Bank Transfer</td><td class="td-muted">—</td><td><span class="pill p-overdue">Overdue</span></td><td><div class="td-actions"><button class="btn btn-red btn-xs" onclick="showToast('Escalation email sent to Nithya!')">🚨 Escalate</button><button class="btn btn-teal btn-xs" onclick="openPayModal('SP-043','Nithya Gopal','AUD 80')">✓ Mark Paid</button></div></td></tr>
+            <tr><td class="td-bold">SP-042</td><td>Ranjith Dass</td><td>🇬🇧 UK</td><td>Family Support</td><td>GBP</td><td>60</td><td style="color:var(--sage);font-weight:600;">60</td><td>0</td><td>0</td><td>PayPal</td><td class="td-muted">Nov 3, 2025</td><td><span class="pill p-active">Confirmed</span></td><td><div class="td-actions"><button class="btn btn-ghost btn-xs" onclick="showToast('Receipt sent!')">🧾 Receipt</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ VIEW: STUDENTS ═══ -->
+  <div class="view" id="view-students">
+    <div class="kpi-band">
+      <div class="kpi"><div class="kpi-n">40</div><div class="kpi-l">Total Student Slots</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--sage);">21</div><div class="kpi-l">Sponsored</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--amber);">19</div><div class="kpi-l">Needs Sponsor</div></div>
+      <div class="kpi"><div class="kpi-n">12</div><div class="kpi-l">🍁 Canadian Sponsors</div></div>
+    </div>
+    <div class="filter-row">
+      <select class="fs"><option>All Districts</option><option>Mannar</option><option>Vanni</option><option>Mullaithivu</option></select>
+      <select class="fs"><option>All Grades</option><option>Grade 6</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10 (O/L)</option><option>Grade 12 (A/L)</option></select>
+      <select class="fs"><option>All Gender</option><option>Female</option><option>Male</option></select>
+      <select class="fs"><option>All Status</option><option>Sponsored</option><option>Unsponsored</option></select>
+      <button class="btn btn-teal btn-sm" onclick="showToast('Filters applied!')">Apply</button>
+      <button class="btn btn-amber btn-sm" style="margin-left:auto;" onclick="showToast('Add student form — coming soon!')">+ Add Student</button>
+      <button class="btn btn-outline btn-sm" onclick="showToast('CSV exported!')">⬇ Export</button>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Student Sponsorship Register</div><div style="font-size:.75rem;color:var(--t3);">Source: SITPI Academy · Live from Google Sheets</div></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Student ID</th><th>Gender</th><th>Age</th><th>Grade</th><th>School Name</th><th>Village / City</th><th>District</th><th>Start Date</th><th>Sponsor ID</th><th>Sponsor Name</th><th>Country</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td class="td-bold">STU-001</td><td>Female</td><td>14</td><td>Grade 9</td><td>St. Sebastian's MV School</td><td>Erukkalampiddy</td><td>Mannar</td><td>Jan 2025</td><td class="td-bold">SP-048</td><td>Kavitha Rajan</td><td>🍁 CA</td><td><span class="pill p-active">Sponsored</span></td><td><div class="td-actions"><div class="btn-icon">👁</div><div class="btn-icon">✏️</div></div></td></tr>
+            <tr><td class="td-bold">STU-002</td><td>Male</td><td>15</td><td>Grade 10</td><td>Mannar Government School</td><td>Mannar Town</td><td>Mannar</td><td>Jan 2025</td><td class="td-bold">SP-044</td><td>Ananthan Murugan</td><td>🍁 CA</td><td><span class="pill p-active">Sponsored</span></td><td><div class="td-actions"><div class="btn-icon">👁</div><div class="btn-icon">✏️</div></div></td></tr>
+            <tr><td class="td-bold">STU-003</td><td>Female</td><td>13</td><td>Grade 8</td><td>Holy Family Convent</td><td>Pesalai</td><td>Mannar</td><td>Mar 2025</td><td class="td-bold">SP-045</td><td>Siva Kumar</td><td>🇺🇸 US</td><td><span class="pill p-active">Sponsored</span></td><td><div class="td-actions"><div class="btn-icon">👁</div><div class="btn-icon">✏️</div></div></td></tr>
+            <tr><td class="td-bold">STU-004</td><td>Male</td><td>16</td><td>Grade 12 (A/L)</td><td>Vavuniya Central College</td><td>Vavuniya</td><td>Vavuniya</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="pill p-pending">Unsponsored</span></td><td><div class="td-actions"><button class="btn btn-teal btn-xs" onclick="showToast('Assign sponsor flow — coming soon!')">Assign →</button></div></td></tr>
+            <tr><td class="td-bold">STU-005</td><td>Female</td><td>12</td><td>Grade 7</td><td>Mullaitivu Govt. School</td><td>Mullaitivu</td><td>Mullaithivu</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="pill p-pending">Unsponsored</span></td><td><div class="td-actions"><button class="btn btn-teal btn-xs" onclick="showToast('Assign sponsor flow — coming soon!')">Assign →</button></div></td></tr>
+            <tr><td class="td-bold">STU-006</td><td>Male</td><td>15</td><td>Grade 10</td><td>Kilinochchi Central School</td><td>Kilinochchi</td><td>Kilinochchi</td><td>Jun 2025</td><td class="td-bold">SP-047</td><td>Murugan Selva</td><td>🇬🇧 UK</td><td><span class="pill p-active">Sponsored</span></td><td><div class="td-actions"><div class="btn-icon">👁</div><div class="btn-icon">✏️</div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ VIEW: SEWING ═══ -->
+  <div class="view" id="view-sewing">
+    <div class="kpi-band">
+      <div class="kpi"><div class="kpi-n">700+</div><div class="kpi-l">Women Trained (All time)</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--sage);">2</div><div class="kpi-l">Sewing Stores Live</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--amber);">1</div><div class="kpi-l">Centre Opening (Nov 2025)</div></div>
+      <div class="kpi"><div class="kpi-n">22</div><div class="kpi-l">Sponsors for Sewing</div></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Training Centres — Completed</div></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>District</th><th>Location</th><th>Women Trained</th><th>Status</th><th>Year</th></tr></thead>
+            <tbody>
+              <tr><td>Mannar</td><td>Mannar Town</td><td class="td-bold">85</td><td><span class="pill p-active">Completed</span></td><td>2022</td></tr>
+              <tr><td>Mannar</td><td>Erukkalampiddy</td><td class="td-bold">72</td><td><span class="pill p-active">Completed</span></td><td>2022</td></tr>
+              <tr><td>Vanni</td><td>Kilinochchi</td><td class="td-bold">60</td><td><span class="pill p-active">Completed</span></td><td>2023</td></tr>
+              <tr><td>Mullaithivu</td><td>Mulliyavalai</td><td class="td-bold">55</td><td><span class="pill p-active">Completed</span></td><td>2023</td></tr>
+              <tr><td>Vavuniya</td><td>Vavuniya</td><td class="td-bold">68</td><td><span class="pill p-active">Completed</span></td><td>2024</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Training Centres — Ongoing</div><button class="btn btn-teal btn-sm" onclick="showToast('Add centre form — coming soon!')">+ Add Centre</button></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>District</th><th>Location</th><th>Enrolled</th><th>Capacity</th><th>Status</th><th>Sponsor Fund</th></tr></thead>
+            <tbody>
+              <tr><td>Mullaithivu</td><td>Mullaithivu Town</td><td class="td-bold">28</td><td>30</td><td><span class="pill p-pending">Opening Nov 2025</span></td><td style="color:var(--sage);">Rs. 62,000 / Rs. 90,000</td></tr>
+              <tr><td>Mannar</td><td>Illayankulam</td><td class="td-bold">22</td><td>25</td><td><span class="pill p-active">Active</span></td><td style="color:var(--sage);">Fully Funded</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ VIEW: WOMEN ═══ -->
+  <div class="view" id="view-women">
+    <div class="kpi-band">
+      <div class="kpi"><div class="kpi-n">300+</div><div class="kpi-l">Total Women in Groups</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--purple);">38</div><div class="kpi-l">Active Groups</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--sage);">Rs. 95,000</div><div class="kpi-l">Total Initial Funds</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--amber);">Rs. 4,20,000</div><div class="kpi-l">Total Current Funds</div></div>
+    </div>
+    <div class="filter-row">
+      <select class="fs"><option>All Districts</option><option>Mannar</option><option>Vanni</option><option>Mullaithivu</option><option>Vavuniya</option></select>
+      <select class="fs"><option>All Sponsors</option><option>SP-044</option><option>SP-045</option><option>SP-046</option></select>
+      <button class="btn btn-teal btn-sm">Apply</button>
+      <button class="btn btn-amber btn-sm" style="margin-left:auto;" onclick="showToast('Add group form!')">+ Add Group</button>
+      <button class="btn btn-outline btn-sm" onclick="showToast('Exported!')">⬇ Export</button>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Women's Empowerment Fund — Groups Tracker</div><div style="font-size:.75rem;color:var(--t3);">Source: Google Sheets CSV · Live data</div></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Group Name</th><th>Members</th><th>Leader</th><th>Village</th><th>District</th><th>Start Date</th><th>Initial Fund (Rs.)</th><th>Current Fund (Rs.)</th><th>Growth</th><th>Sponsor Name</th><th>Last Updated</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td class="td-bold">Kamalam Group</td><td>12</td><td>Vasantha S.</td><td>Erukkalampiddy</td><td>Mannar</td><td>Jan 2022</td><td>30,000</td><td style="color:var(--sage);font-weight:600;">2,85,000</td><td>↑ Rs. 2,55,000</td><td>SP-044</td><td class="td-muted">Nov 2025</td><td><div class="td-actions"><div class="btn-icon">👁</div><div class="btn-icon">✏️</div></div></td></tr>
+            <tr><td class="td-bold">Malligai Group</td><td>10</td><td>Thanga L.</td><td>Kilinochchi</td><td>Vanni</td><td>Mar 2022</td><td>25,000</td><td style="color:var(--sage);font-weight:600;">1,10,000</td><td>↑ Rs. 85,000</td><td>SP-045</td><td class="td-muted">Oct 2025</td><td><div class="td-actions"><div class="btn-icon">👁</div><div class="btn-icon">✏️</div></div></td></tr>
+            <tr><td class="td-bold">Vani Group</td><td>8</td><td>Santha K.</td><td>Mannar Town</td><td>Mannar</td><td>Jun 2023</td><td>20,000</td><td style="color:var(--amber);font-weight:600;">42,000</td><td>↑ Rs. 22,000</td><td>SP-046</td><td class="td-muted">Oct 2025</td><td><div class="td-actions"><div class="btn-icon">👁</div><div class="btn-icon">✏️</div></div></td></tr>
+            <tr><td class="td-bold">Kuyil Group</td><td>10</td><td>Nirmala R.</td><td>Vanni North</td><td>Vanni</td><td>Dec 2025</td><td><span style="color:var(--amber);">25,000 (pending)</span></td><td>—</td><td>—</td><td>SP-049 (new)</td><td class="td-muted">Pending</td><td><div class="td-actions"><button class="btn btn-teal btn-xs" onclick="showToast('Fund disbursed!')">Disburse</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ VIEW: PENPAL ═══ -->
+  <div class="view" id="view-penpal">
+    <div class="kpi-band">
+      <div class="kpi"><div class="kpi-n">34</div><div class="kpi-l">Active Pairs</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--amber);">16</div><div class="kpi-l">Spots Open</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--teal);">50</div><div class="kpi-l">Total Pairs Goal</div></div>
+      <div class="kpi"><div class="kpi-n">7</div><div class="kpi-l">Class Codes</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Penpal Pairs — Canada ↔ Sri Lanka</div><button class="btn btn-teal btn-sm" onclick="showToast('Add pair form — coming soon!')">+ Add Pair</button></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Pair #</th><th>Class Code</th><th>Canada Student Age</th><th>Sri Lanka Age</th><th>Village (SL)</th><th>District</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td class="td-bold">PP-001</td><td>CAN-A1</td><td>13</td><td>14</td><td>Erukkalampiddy</td><td>Mannar</td><td><span class="pill p-active">Active</span></td><td><div class="td-actions"><div class="btn-icon">👁</div></div></td></tr>
+            <tr><td class="td-bold">PP-002</td><td>CAN-A1</td><td>12</td><td>13</td><td>Mannar Town</td><td>Mannar</td><td><span class="pill p-active">Active</span></td><td><div class="td-actions"><div class="btn-icon">👁</div></div></td></tr>
+            <tr><td class="td-bold">PP-003</td><td>CAN-B2</td><td>15</td><td>15</td><td>Kilinochchi</td><td>Vanni</td><td><span class="pill p-active">Active</span></td><td><div class="td-actions"><div class="btn-icon">👁</div></div></td></tr>
+            <tr><td class="td-bold">PP-035</td><td>—</td><td>—</td><td>—</td><td>Mullaitivu</td><td>Mullaithivu</td><td><span class="pill p-pending">Unmatched (SL)</span></td><td><div class="td-actions"><button class="btn btn-teal btn-xs" onclick="showToast('Match pair — coming soon!')">Match →</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ VIEW: TUITION ═══ -->
+  <div class="view" id="view-tuition">
+    <div class="kpi-band">
+      <div class="kpi"><div class="kpi-n">11+</div><div class="kpi-l">Active Centres</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--sage);">300+</div><div class="kpi-l">Students Enrolled</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--amber);">Rs. 45,000</div><div class="kpi-l">Collected (Mannar)</div></div>
+      <div class="kpi"><div class="kpi-n">18</div><div class="kpi-l">Sponsors</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Tuition Centres — Status Overview</div><button class="btn btn-amber btn-sm" onclick="showToast('Add centre!')">+ Add Centre</button></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Centre</th><th>Location</th><th>District</th><th>Students</th><th>Coordinators</th><th>Fund Goal</th><th>Fund Raised</th><th>Coverage</th><th>Status</th><th>Last Updated</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td class="td-bold">TC-01</td><td>Mannar Town</td><td>Mannar</td><td>43</td><td>2</td><td>Rs. 75,000</td><td style="color:var(--sage);font-weight:600;">Rs. 45,000</td><td><div class="pb-wrap"><div class="pb"><div class="pf" style="width:60%"></div></div><div class="pb-pct">60%</div></div></td><td><span class="pill p-active">Active</span></td><td class="td-muted">Nov 2025</td><td><div class="td-actions"><div class="btn-icon">👁</div><button class="btn btn-teal btn-xs" onclick="showToast('Update sent!')">Update</button></div></td></tr>
+            <tr><td class="td-bold">TC-02</td><td>Pesalai</td><td>Mannar</td><td>28</td><td>1</td><td>Rs. 45,000</td><td style="color:var(--sage);font-weight:600;">Rs. 45,000</td><td><div class="pb-wrap"><div class="pb"><div class="pf" style="width:100%"></div></div><div class="pb-pct">100%</div></div></td><td><span class="pill p-active">Fully Funded</span></td><td class="td-muted">Oct 2025</td><td><div class="td-actions"><div class="btn-icon">👁</div></div></td></tr>
+            <tr><td class="td-bold">TC-03</td><td>Kilinochchi</td><td>Vanni</td><td>35</td><td>2</td><td>Rs. 60,000</td><td style="color:var(--amber);font-weight:600;">Rs. 22,000</td><td><div class="pb-wrap"><div class="pb"><div class="pf am" style="width:37%"></div></div><div class="pb-pct">37%</div></div></td><td><span class="pill p-pending">Needs Funding</span></td><td class="td-muted">Oct 2025</td><td><div class="td-actions"><div class="btn-icon">👁</div><button class="btn btn-amber btn-xs" onclick="showToast('Promoted on website!')">Promote</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ VIEW: MICRO-LOANS ═══ -->
+  <div class="view" id="view-microloan">
+    <div class="kpi-band">
+      <div class="kpi"><div class="kpi-n">100+</div><div class="kpi-l">Businesses Supported</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--sage);">Rs. 1,20,000</div><div class="kpi-l">Fund Raised</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--amber);">Rs. 80,000</div><div class="kpi-l">Needed</div></div>
+      <div class="kpi"><div class="kpi-n">35</div><div class="kpi-l">Sponsors</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Micro-Loan Disbursements — Mannar District</div><button class="btn btn-amber btn-sm" onclick="showToast('Add loan record!')">+ Add Loan</button></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Loan ID</th><th>Beneficiary</th><th>Business Type</th><th>Village</th><th>Amount (Rs.)</th><th>Disbursed</th><th>Repaid</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td class="td-bold">ML-018</td><td>Vimala S.</td><td>Vegetable Stall</td><td>Mannar Town</td><td>10,000</td><td>Mar 2025</td><td style="color:var(--sage);font-weight:600;">10,000</td><td>0</td><td><span class="pill p-active">Repaid ✅</span></td><td><div class="td-actions"><div class="btn-icon">👁</div><button class="btn btn-teal btn-xs" onclick="showToast('Fund redeployed!')">Redeploy</button></div></td></tr>
+            <tr><td class="td-bold">ML-019</td><td>Rajan K.</td><td>Small Shop</td><td>Pesalai</td><td>15,000</td><td>May 2025</td><td style="color:var(--amber);font-weight:600;">8,000</td><td style="color:var(--terra);">7,000</td><td><span class="pill p-pending">Partial</span></td><td><div class="td-actions"><div class="btn-icon">👁</div><button class="btn btn-ghost btn-xs" onclick="showToast('Follow-up logged!')">Follow-up</button></div></td></tr>
+            <tr><td class="td-bold">ML-020</td><td>Geetha M.</td><td>Tailoring</td><td>Erukkalampiddy</td><td>12,000</td><td>Aug 2025</td><td style="color:var(--amber);font-weight:600;">4,000</td><td style="color:var(--terra);">8,000</td><td><span class="pill p-pending">Active</span></td><td><div class="td-actions"><div class="btn-icon">👁</div></div></td></tr>
+            <tr><td class="td-bold">ML-021</td><td>Kumar T.</td><td>Fish Trading</td><td>Nanaddan</td><td>20,000</td><td>Oct 2025</td><td>0</td><td style="color:var(--terra);">20,000</td><td><span class="pill p-new">New</span></td><td><div class="td-actions"><div class="btn-icon">👁</div></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ VIEW: FAMILY SUPPORT ═══ -->
+  <div class="view" id="view-family">
+    <div class="kpi-band">
+      <div class="kpi"><div class="kpi-n">4</div><div class="kpi-l">Families (This Quarter)</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--sage);">Rs. 38,000</div><div class="kpi-l">Fund Raised</div></div>
+      <div class="kpi"><div class="kpi-n" style="color:var(--amber);">Rs. 22,000</div><div class="kpi-l">Still Needed</div></div>
+      <div class="kpi"><div class="kpi-n">14</div><div class="kpi-l">Sponsors</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Family Support Records — Mullaitivu, Vavuniya, Malayagam</div><button class="btn btn-amber btn-sm" onclick="showToast('Add family!')">+ Add Family</button></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Family / Contact</th><th>Village</th><th>District</th><th>Support Type</th><th>Amount (Rs.)</th><th>Date</th><th>Status</th><th>Coordinator</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td class="td-bold">FAM-012</td><td>Selvi family (3 members)</td><td>Mullaitivu</td><td>Mullaithivu</td><td>Food pack + Medical</td><td>9,500</td><td>Oct 2025</td><td><span class="pill p-active">Delivered ✅</span></td><td>Dist. Coord. A</td><td><div class="td-actions"><div class="btn-icon">👁</div></div></td></tr>
+            <tr><td class="td-bold">FAM-013</td><td>Maran family (5 members)</td><td>Vavuniya</td><td>Vavuniya</td><td>Bicycle + School supplies</td><td>12,000</td><td>Oct 2025</td><td><span class="pill p-active">Delivered ✅</span></td><td>Dist. Coord. B</td><td><div class="td-actions"><div class="btn-icon">👁</div></div></td></tr>
+            <tr><td class="td-bold">FAM-014</td><td>Kantha family (Maveerar)</td><td>Malayagam</td><td>Vavuniya</td><td>Housing — washroom</td><td>25,000</td><td>Nov 2025</td><td><span class="pill p-pending">In Progress</span></td><td>Dist. Coord. B</td><td><div class="td-actions"><div class="btn-icon">👁</div><button class="btn btn-teal btn-xs" onclick="showToast('Status updated!')">Update</button></div></td></tr>
+            <tr><td class="td-bold">FAM-015</td><td>Inba family (4 members)</td><td>Mullaitivu</td><td>Mullaithivu</td><td>Eyeglasses + Food</td><td>6,500</td><td>Nov 2025</td><td><span class="pill p-pending">Pending</span></td><td>Dist. Coord. A</td><td><div class="td-actions"><div class="btn-icon">👁</div><button class="btn btn-amber btn-xs" onclick="showToast('Flagged for coordinator!')">Flag</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ VIEW: ADD SPONSOR ═══ -->
+  <div class="view" id="view-add-sponsor">
+    <div class="g2">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Add New Sponsor</div></div>
+        <div class="card-body">
+          <form onsubmit="submitSponsor(event)">
+            <div class="f-row">
+              <div class="fg"><label class="fl">First Name *</label><input class="fi" type="text" placeholder="Ananthan" required style="width:100%;"/></div>
+              <div class="fg"><label class="fl">Last Name *</label><input class="fi" type="text" placeholder="Murugan" required style="width:100%;"/></div>
+            </div>
+            <div class="fg"><label class="fl">Email Address *</label><input class="fi" type="email" placeholder="sponsor@email.com" required style="width:100%;"/></div>
+            <div class="fg"><label class="fl">Phone (WhatsApp)</label><input class="fi" type="tel" placeholder="+1 416 555 0100" style="width:100%;"/></div>
+            <div class="f-row">
+              <div class="fg"><label class="fl">Country *</label><select class="fs" required style="width:100%;"><option value="">Select</option><option>🍁 Canada</option><option>🇬🇧 United Kingdom</option><option>🇺🇸 United States</option><option>🇦🇺 Australia</option><option>🇱🇰 Sri Lanka</option><option>Other</option></select></div>
+              <div class="fg"><label class="fl">Currency *</label><select class="fs" style="width:100%;"><option>CAD</option><option>USD</option><option>GBP</option><option>LKR</option><option>AUD</option></select></div>
+            </div>
+            <div class="fg"><label class="fl">Project *</label><select class="fs" required style="width:100%;"><option value="">Select project</option><option>PRJ-001 · Student Sponsorship — Mannar</option><option>PRJ-002 · Penpal Program</option><option>PRJ-003 · Tuition Centre — Mannar</option><option>PRJ-004 · Sewing Centre — Mullaithivu</option><option>PRJ-005 · Women's Fund — Vanni</option><option>PRJ-006 · Micro-Loan — Mannar</option><option>PRJ-007 · Family Care Fund</option></select></div>
+            <div class="f-row">
+              <div class="fg"><label class="fl">Agreed Amount *</label><input class="fi" type="number" placeholder="75" required style="width:100%;"/></div>
+              <div class="fg"><label class="fl">Payment Method</label><select class="fs" style="width:100%;"><option>E-Transfer</option><option>PayPal</option><option>Bank Transfer</option><option>Online Card</option><option>Cash</option></select></div>
+            </div>
+            <div class="fg"><label class="fl">Payment Frequency</label><select class="fs" style="width:100%;"><option>Monthly</option><option>Quarterly</option><option>One-time</option><option>Annual</option></select></div>
+            <div class="fg"><label class="fl">Sponsor Notes</label><textarea class="fi" style="width:100%;min-height:68px;resize:vertical;border-radius:var(--rs);" placeholder="Any notes about this sponsor…"></textarea></div>
+            <div style="display:flex;gap:.6rem;">
+              <button type="submit" class="btn btn-teal">✅ Add Sponsor</button>
+              <button type="button" class="btn btn-outline" onclick="showToast('Form cleared!')">Clear</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:1.2rem;">
+        <!-- Sponsor ID preview -->
+        <div class="card">
+          <div class="card-head"><div class="card-title">Sponsor ID Assignment</div></div>
+          <div class="card-body">
+            <div class="sp-detail">
+              <div class="sp-detail-row"><div class="sp-detail-l">Next Sponsor ID</div><div class="sp-detail-v" style="color:var(--teal);">SP-051</div></div>
+              <div class="sp-detail-row"><div class="sp-detail-l">Total Active Sponsors</div><div class="sp-detail-v">54</div></div>
+              <div class="sp-detail-row"><div class="sp-detail-l">New This Month</div><div class="sp-detail-v">6</div></div>
+              <div class="sp-detail-row"><div class="sp-detail-l">Sheet Sync Status</div><div class="sp-detail-v" style="color:var(--sage);">✅ Synced 2h ago</div></div>
+            </div>
+            <p style="font-size:.76rem;color:var(--t3);line-height:1.65;">The Sponsor ID will be auto-generated and written to the Google Sheets dashboard at <strong>nesakkarangal.org/sponsors/</strong>. The sponsor will receive an automated welcome email with their Sponsor ID.</p>
+          </div>
+        </div>
+        <!-- Quick tips -->
+        <div class="card">
+          <div class="card-head"><div class="card-title">📋 Quick Reference</div></div>
+          <div class="card-body" style="font-size:.78rem;color:var(--t3);line-height:1.75;">
+            <p><strong style="color:var(--t2);">E-Transfer (Canada):</strong> Most common for Canadian sponsors. Funds sent directly to the coordinator.</p>
+            <p style="margin-top:.5rem;"><strong style="color:var(--t2);">PayPal:</strong> Used for international sponsors. Higher fees — note in records.</p>
+            <p style="margin-top:.5rem;"><strong style="color:var(--t2);">Amount recording:</strong> Record in the sponsor's native currency. Conversion tracked separately.</p>
+            <p style="margin-top:.5rem;"><strong style="color:var(--t2);">Linked project:</strong> Each sponsor is tied to a specific project ID for transparency reporting.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ VIEW: REPORTS ═══ -->
+  <div class="view" id="view-reports">
+    <div class="g3" style="margin-bottom:1.2rem;">
+      <div class="card" style="cursor:pointer;" onclick="showToast('Generating Sponsor Report PDF…')">
+        <div class="card-body" style="text-align:center;padding:1.8rem;">
+          <div style="font-size:2rem;margin-bottom:.7rem;">📊</div>
+          <div style="font-family:var(--fd);font-size:1rem;font-weight:600;margin-bottom:.3rem;">Full Sponsor Report</div>
+          <div style="font-size:.76rem;color:var(--t3);">All sponsors · amounts · status · Nov 2025</div>
+          <button class="btn btn-teal btn-sm" style="margin-top:.9rem;">⬇ Download PDF</button>
+        </div>
+      </div>
+      <div class="card" style="cursor:pointer;" onclick="showToast('Exporting to Google Sheets…')">
+        <div class="card-body" style="text-align:center;padding:1.8rem;">
+          <div style="font-size:2rem;margin-bottom:.7rem;">📋</div>
+          <div style="font-family:var(--fd);font-size:1rem;font-weight:600;margin-bottom:.3rem;">Google Sheets Export</div>
+          <div style="font-size:.76rem;color:var(--t3);">Sync all data to the public Google Sheet dashboard</div>
+          <button class="btn btn-outline btn-sm" style="margin-top:.9rem;">⟳ Sync Now</button>
+        </div>
+      </div>
+      <div class="card" style="cursor:pointer;" onclick="showToast('Generating impact report…')">
+        <div class="card-body" style="text-align:center;padding:1.8rem;">
+          <div style="font-size:2rem;margin-bottom:.7rem;">🌍</div>
+          <div style="font-family:var(--fd);font-size:1rem;font-weight:600;margin-bottom:.3rem;">Impact Report</div>
+          <div style="font-size:.76rem;color:var(--t3);">Lives touched · funds raised · programs active</div>
+          <button class="btn btn-amber btn-sm" style="margin-top:.9rem;">Generate Report</button>
+        </div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Send Bulk Updates to Sponsors</div></div>
+        <div class="card-body">
+          <div class="fg"><label class="fl">Recipients</label><select class="fs" style="width:100%;"><option>All Active Sponsors (48)</option><option>Pending Sponsors (6)</option><option>Specific Project — Student Sponsorship</option><option>Specific Project — Sewing Centre</option><option>Custom list</option></select></div>
+          <div class="fg"><label class="fl">Update Type</label><select class="fs" style="width:100%;"><option>Monthly Project Update</option><option>Payment Reminder</option><option>New Project Available</option><option>Thank You / Receipt</option><option>Custom Message</option></select></div>
+          <div class="fg"><label class="fl">Message Preview</label><textarea class="fi" style="width:100%;min-height:90px;border-radius:var(--rs);resize:vertical;">Dear {Sponsor_Name}, here is your November 2025 update from Nesakkarangal. Your sponsored project — {Project_Name} — is progressing well…</textarea></div>
+          <button class="btn btn-amber" onclick="showToast('Emails sent to 48 active sponsors!')">📧 Send to All Active Sponsors</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Audit Log</div></div>
+        <div class="card-body" style="padding:.6rem 1.1rem;">
+          <div class="timeline">
+            <div class="tl-item"><div class="tl-date">Nov 3, 2025 · 10:22 AM</div><div class="tl-text">SP-048 payment confirmed · CAD 75 · Kavitha Rajan</div></div>
+            <div class="tl-item"><div class="tl-date">Nov 2, 2025 · 2:10 PM</div><div class="tl-text">SP-050 registered · Thanuja Nair · Canada</div></div>
+            <div class="tl-item"><div class="tl-date">Nov 1, 2025 · 9:05 AM</div><div class="tl-text">Monthly update emails sent to 48 sponsors</div></div>
+            <div class="tl-item"><div class="tl-date">Oct 28, 2025 · 3:45 PM</div><div class="tl-text">SP-047 payment confirmed · GBP 40 · Murugan Selva</div></div>
+            <div class="tl-item"><div class="tl-date">Oct 25, 2025 · 11:30 AM</div><div class="tl-text">Sewing Centre Mullaithivu — 28 enrolled of 30</div></div>
+            <div class="tl-item"><div class="tl-date">Oct 20, 2025 · 4:00 PM</div><div class="tl-text">Women's Fund Vanni — Rs. 18,000 raised · 72% funded</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ VIEW: ACTIVITY ═══ -->
+  <div class="view" id="view-activity">
+    <div class="card">
+      <div class="card-head"><div class="card-title">All Recent Activity</div><button class="btn btn-outline btn-sm" onclick="showToast('Activity log exported!')">⬇ Export</button></div>
+      <div class="card-body" style="padding:.5rem 1.1rem;">
+        <div class="act-item"><div class="act-ico" style="background:var(--sl);">✅</div><div class="act-text"><div class="act-t">Payment confirmed — SP-048 · Kavitha Rajan</div><div class="act-s">CAD 75 · E-Transfer · Student Sponsorship</div></div><div class="act-time">2h ago</div></div>
+        <div class="act-item"><div class="act-ico" style="background:var(--tl);">➕</div><div class="act-text"><div class="act-t">New sponsor registered — SP-050</div><div class="act-s">Thanuja Nair · Canada · Student Sponsorship</div></div><div class="act-time">5h ago</div></div>
+        <div class="act-item"><div class="act-ico" style="background:var(--tl);">➕</div><div class="act-text"><div class="act-t">New sponsor registered — SP-049</div><div class="act-s">Dharshan Vel · UK · Women's Fund</div></div><div class="act-time">8h ago</div></div>
+        <div class="act-item"><div class="act-ico" style="background:var(--ap);">⏰</div><div class="act-text"><div class="act-t">Payment overdue — SP-043 · Nithya Gopal</div><div class="act-s">AUD 80 · Micro-Loan Fund · 14 days overdue</div></div><div class="act-time">1d ago</div></div>
+        <div class="act-item"><div class="act-ico" style="background:var(--sl);">🧵</div><div class="act-text"><div class="act-t">Sewing Centre progress update</div><div class="act-s">Mullaithivu — 28 of 30 women enrolled · Rs. 62,000 raised</div></div><div class="act-time">2d ago</div></div>
+        <div class="act-item"><div class="act-ico" style="background:var(--pl);">📧</div><div class="act-text"><div class="act-t">Monthly update emails sent</div><div class="act-s">48 active sponsors notified · Oct 2025 project report</div></div><div class="act-time">3d ago</div></div>
+        <div class="act-item"><div class="act-ico" style="background:var(--sl);">✅</div><div class="act-text"><div class="act-t">Payment confirmed — SP-047 · Murugan Selva</div><div class="act-s">GBP 40 · Bank Transfer · Sewing Centre</div></div><div class="act-time">6d ago</div></div>
+        <div class="act-item"><div class="act-ico" style="background:var(--tl);">👩</div><div class="act-text"><div class="act-t">Women's group — Kuyil Group added</div><div class="act-s">10 members · Vanni · Pending seed fund disbursement</div></div><div class="act-time">1w ago</div></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ VIEW: SETTINGS ═══ -->
+  <div class="view" id="view-settings">
+    <div class="g2">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Google Sheets Integration</div></div>
+        <div class="card-body">
+          <div class="fg"><label class="fl">Sponsors Sheet CSV URL</label><input class="fi" type="url" value="https://docs.google.com/spreadsheets/d/…/pub?output=csv" style="width:100%;font-size:.75rem;"/></div>
+          <div class="fg"><label class="fl">Students Sheet CSV URL</label><input class="fi" type="url" value="https://docs.google.com/spreadsheets/d/…/pub?output=csv" style="width:100%;font-size:.75rem;"/></div>
+          <div class="fg"><label class="fl">Women's Groups Sheet URL</label><input class="fi" type="url" value="https://docs.google.com/spreadsheets/d/…/pub?output=csv" style="width:100%;font-size:.75rem;"/></div>
+          <div class="fg"><label class="fl">Auto-Sync Frequency</label><select class="fs" style="width:100%;"><option>Every 30 minutes</option><option>Every hour</option><option>Every 6 hours</option><option>Manual only</option></select></div>
+          <button class="btn btn-teal" onclick="showToast('Settings saved! Sheets connected.')">Save Integration Settings</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Email Notifications</div></div>
+        <div class="card-body">
+          <div class="fg"><label class="fl">Admin Email</label><input class="fi" type="email" value="info@nesakkarangal.org" style="width:100%;"/></div>
+          <div class="fg"><label class="fl">Send notifications when</label>
+            <div style="display:flex;flex-direction:column;gap:.5rem;font-size:.8rem;color:var(--t2);margin-top:.3rem;">
+              <label><input type="checkbox" checked style="margin-right:.4rem;"/>New sponsor registers</label>
+              <label><input type="checkbox" checked style="margin-right:.4rem;"/>Payment confirmed</label>
+              <label><input type="checkbox" checked style="margin-right:.4rem;"/>Payment overdue (14 days)</label>
+              <label><input type="checkbox" style="margin-right:.4rem;"/>Project fully funded</label>
+              <label><input type="checkbox" style="margin-right:.4rem;"/>Sponsor account inactive 30 days</label>
+            </div>
+          </div>
+          <button class="btn btn-outline" onclick="showToast('Email settings saved!')">Save Email Settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+
+<!-- ═══════ SPONSOR VIEW MODAL ═══════ -->
+<div class="overlay" id="sponsorModal">
+  <div class="modal" style="max-width:540px;">
+    <button class="modal-x" onclick="closeModal('sponsorModal')">✕</button>
+    <div class="modal-h" id="sm-title">Sponsor Detail</div>
+    <div class="modal-sub" id="sm-id">SP-000</div>
+
+    <div class="sp-detail">
+      <div class="sp-detail-row"><div class="sp-detail-l">Full Name</div><div class="sp-detail-v" id="sm-name">—</div></div>
+      <div class="sp-detail-row"><div class="sp-detail-l">Country</div><div class="sp-detail-v">🍁 Canada</div></div>
+      <div class="sp-detail-row"><div class="sp-detail-l">Email</div><div class="sp-detail-v">sponsor@email.com</div></div>
+      <div class="sp-detail-row"><div class="sp-detail-l">Project</div><div class="sp-detail-v">PRJ-001 · Student Sponsorship</div></div>
+      <div class="sp-detail-row"><div class="sp-detail-l">Currency</div><div class="sp-detail-v">CAD</div></div>
+      <div class="sp-detail-row"><div class="sp-detail-l">Agreed Amount</div><div class="sp-detail-v">CAD 75</div></div>
+      <div class="sp-detail-row"><div class="sp-detail-l">Amount Received</div><div class="sp-detail-v" style="color:var(--sage);">CAD 75 ✅</div></div>
+      <div class="sp-detail-row"><div class="sp-detail-l">Amount Allocated</div><div class="sp-detail-v">CAD 75</div></div>
+      <div class="sp-detail-row"><div class="sp-detail-l">Balance</div><div class="sp-detail-v">0</div></div>
+      <div class="sp-detail-row"><div class="sp-detail-l">Pending to Pay</div><div class="sp-detail-v">0</div></div>
+      <div class="sp-detail-row"><div class="sp-detail-l">Payment Method</div><div class="sp-detail-v">E-Transfer</div></div>
+      <div class="sp-detail-row"><div class="sp-detail-l">Sponsor Since</div><div class="sp-detail-v">Jan 2025</div></div>
+      <div class="sp-detail-row"><div class="sp-detail-l">Active Status</div><div class="sp-detail-v"><span class="pill p-active">Active</span></div></div>
+    </div>
+
+    <div style="margin-bottom:.9rem;">
+      <div style="font-size:.75rem;font-weight:600;color:var(--t3);margin-bottom:.5rem;letter-spacing:.04em;text-transform:uppercase;">Activity Timeline</div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-date">Nov 1, 2025</div><div class="tl-text">Payment of CAD 75 confirmed via E-Transfer</div></div>
+        <div class="tl-item"><div class="tl-date">Oct 15, 2025</div><div class="tl-text">Monthly update email sent · Project progress report</div></div>
+        <div class="tl-item"><div class="tl-date">Jan 10, 2025</div><div class="tl-text">Sponsor registered · Student Sponsorship — Mannar</div></div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+      <button class="btn btn-teal btn-sm" onclick="showToast('Update email sent!');closeModal('sponsorModal')">📧 Send Update</button>
+      <button class="btn btn-outline btn-sm" onclick="showToast('Receipt generated!')">🧾 Generate Receipt</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('sponsorModal')">Edit Profile</button>
+      <button class="btn btn-red btn-sm" style="margin-left:auto;" onclick="showToast('Sponsor marked inactive.');closeModal('sponsorModal')">Deactivate</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ MARK PAID MODAL ═══════ -->
+<div class="overlay" id="payModal">
+  <div class="modal" style="max-width:400px;">
+    <button class="modal-x" onclick="closeModal('payModal')">✕</button>
+    <div class="modal-h">Mark Payment Received</div>
+    <div class="modal-sub" id="pm-sub">Recording payment for SP-000</div>
+    <div class="sp-detail">
+      <div class="sp-detail-row"><div class="sp-detail-l">Sponsor</div><div class="sp-detail-v" id="pm-name">—</div></div>
+      <div class="sp-detail-row"><div class="sp-detail-l">Expected Amount</div><div class="sp-detail-v" id="pm-amt">—</div></div>
+    </div>
+    <div class="fg"><label class="fl">Amount Received</label><input class="fi" type="text" id="pm-input" style="width:100%;" placeholder="e.g. CAD 50"/></div>
+    <div class="fg"><label class="fl">Payment Date</label><input class="fi" type="date" style="width:100%;"/></div>
+    <div class="fg"><label class="fl">Payment Method</label><select class="fs" style="width:100%;"><option>E-Transfer</option><option>PayPal</option><option>Bank Transfer</option><option>Cash</option></select></div>
+    <div class="fg"><label class="fl">Reference / Note</label><input class="fi" type="text" style="width:100%;" placeholder="E-transfer ref or bank ref no."/></div>
+    <div style="display:flex;gap:.6rem;">
+      <button class="btn btn-teal" onclick="confirmPayment()">✅ Confirm Payment</button>
+      <button class="btn btn-outline" onclick="closeModal('payModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+// Populate sponsors table
+const sponsorData = [
+  ['SP-048','Kavitha Rajan','🍁 CA','PRJ-001','Student Sponsorship','CAD','75','75','75','0','0','E-Transfer','—','Active','Jan 2025'],
+  ['SP-047','Murugan Selva','🇬🇧 UK','PRJ-004','Sewing Centre','GBP','40','40','40','0','0','Bank Transfer','—','Active','Mar 2025'],
+  ['SP-046','Priya Thillai','🍁 CA','PRJ-005','Women\'s Fund','CAD','50','0','0','50','50','E-Transfer','—','Pending','Aug 2025'],
+  ['SP-045','Siva Kumar','🇺🇸 US','PRJ-003','Tuition Centre','USD','60','60','60','0','0','PayPal','—','Active','Feb 2025'],
+  ['SP-044','Ananthan Murugan','🍁 CA','PRJ-001','Student Sponsorship','CAD','175','125','125','50','50','E-Transfer','—','Pending','Jan 2025'],
+  ['SP-043','Nithya Gopal','🇦🇺 AU','PRJ-006','Micro-Loan','AUD','80','0','0','80','80','Bank Transfer','—','Overdue','Jun 2025'],
+  ['SP-042','Ranjith Dass','🇬🇧 UK','PRJ-007','Family Support','GBP','60','60','60','0','0','PayPal','—','Active','Apr 2025'],
+  ['SP-041','Thulasi M.','🍁 CA','PRJ-001','Student Sponsorship','CAD','75','75','75','0','0','E-Transfer','—','Active','Jan 2025'],
+  ['SP-040','Vimala Rajan','🇱🇰 LK','PRJ-005','Women\'s Fund','LKR','25000','25000','25000','0','0','Bank Transfer','—','Active','May 2025'],
+  ['SP-039','Saravan K.','🍁 CA','PRJ-002','Penpal Program','CAD','30','0','0','30','30','E-Transfer','—','Overdue','Sep 2025'],
+];
+
+const statusClass = {Active:'p-active',Pending:'p-pending',Overdue:'p-overdue',Inactive:'p-inactive'};
+
+function buildSponsorsTable() {
+  const tbody = document.getElementById('sponsors-tbody');
+  tbody.innerHTML = sponsorData.map(r => `
+    <tr>
+      <td><input type="checkbox" style="cursor:pointer;"/></td>
+      <td class="td-bold">${r[0]}</td>
+      <td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td>
+      <td>${r[5]}</td>
+      <td class="td-bold">${r[6]}</td>
+      <td style="font-weight:600;color:${r[7]==='0'?'var(--red)':r[7]===r[6]?'var(--sage)':'var(--amber)'};">${r[7]}</td>
+      <td>${r[8]}</td>
+      <td style="color:${parseInt(r[9])>0?'var(--terra)':'var(--t3)'};">${r[9]}</td>
+      <td style="color:${parseInt(r[10])>0?'var(--red)':'var(--t3)'};">${r[10]}</td>
+      <td>${r[11]}</td>
+      <td class="td-muted">${r[12]}</td>
+      <td><span class="pill ${statusClass[r[13]]||'p-inactive'}">${r[13]}</span></td>
+      <td class="td-muted">${r[14]}</td>
+      <td>
+        <div class="td-actions">
+          <div class="btn-icon" onclick="openSponsorModal('${r[0]}','${r[1]}')">👁</div>
+          <div class="btn-icon" onclick="showToast('Edit form for ${r[0]}')">✏️</div>
+          ${r[13]==='Pending'||r[13]==='Overdue' ? `<button class="btn btn-amber btn-xs" onclick="showToast('Reminder sent to ${r[1]}!')">📧</button>` : ''}
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+buildSponsorsTable();
+
+// Navigation
+const titleMap = {
+  overview:'Dashboard Overview', sponsors:'All Sponsors', payments:'Payments & Collections',
+  students:'Student Sponsorship', penpal:'Penpal Program', tuition:'Tuition Centres',
+  sewing:'Sewing & Skills Training', women:'Women\'s Groups', microloan:'Micro-Loans',
+  family:'Family Support', 'add-sponsor':'Add New Sponsor', reports:'Reports & Export',
+  activity:'Recent Activity', settings:'Settings'
+};
+
+function nav(el, viewId) {
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const v = document.getElementById('view-' + viewId);
+  if (v) v.classList.add('active');
+  document.getElementById('topbar-title').textContent = titleMap[viewId] || viewId;
+}
+
+function switchTab(el, id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Modals
+function openSponsorModal(id, name) {
+  document.getElementById('sm-title').textContent = 'Sponsor Profile — ' + id;
+  document.getElementById('sm-id').textContent = id + ' · ' + name;
+  document.getElementById('sm-name').textContent = name;
+  document.getElementById('sponsorModal').classList.add('open');
+}
+function openPayModal(id, name, amt) {
+  document.getElementById('pm-sub').textContent = 'Recording payment for ' + id;
+  document.getElementById('pm-name').textContent = name;
+  document.getElementById('pm-amt').textContent = amt;
+  document.getElementById('pm-input').value = amt;
+  document.getElementById('payModal').classList.add('open');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', function(e) { if(e.target===this) this.classList.remove('open'); }));
+
+function confirmPayment() {
+  closeModal('payModal');
+  showToast('✅ Payment confirmed and recorded in Sheets!');
+}
+
+function submitSponsor(e) {
+  e.preventDefault();
+  showToast('✅ SP-051 added! Welcome email sent to sponsor.');
+}
+
+// Toast
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>

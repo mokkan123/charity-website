@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Nesakkarangal — Touching Hearts, Changing Lives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --teal:#0D5C5C;--teal-dark:#083A3A;--teal-mid:#1A7A7A;--teal-light:#D8EEEE;--teal-pale:#F0FAF9;
+  --amber:#C8780A;--amber-light:#F5C040;--amber-pale:#FEF3DC;
+  --terra:#B84C2A;--terra-light:#FAE0D8;
+  --sage:#4A7C59;--sage-light:#D4EAD8;
+  --purple:#5E4A8A;--purple-light:#EDE8F8;
+  --bg:#F4F8F8;--bg-card:#FFFFFF;
+  --text-1:#0A1E1E;--text-2:#2A4444;--text-3:#618080;--border:#C8DEDE;
+  --shadow:rgba(13,92,92,.10);
+  --fd:'Lora',Georgia,serif;--fb:'Outfit',sans-serif;
+  --r:14px;--rs:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text-1);overflow-x:hidden}
+button{cursor:pointer;font-family:var(--fb)}a{text-decoration:none;color:inherit}ul{list-style:none}
+.page{display:none;animation:fu .42s ease both}.page.active{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;height:66px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(244,248,248,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:.55rem;cursor:pointer}
+.logo-n{width:34px;height:34px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:1.1rem;font-weight:700;color:#fff}
+.logo-text{font-family:var(--fd);font-size:1.2rem;font-weight:600;color:var(--teal-dark);line-height:1}
+.logo-sub{font-size:.62rem;color:var(--text-3);font-style:italic;display:block;margin-top:.04rem}
+.nav-links{display:flex;gap:1.6rem}
+.nav-link{font-size:.85rem;font-weight:500;color:var(--text-2);cursor:pointer;transition:color .2s}
+.nav-link:hover,.nav-link.active{color:var(--teal)}
+.nav-actions{display:flex;gap:.6rem;align-items:center}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:.45rem;padding:.58rem 1.3rem;border-radius:100px;font-size:.86rem;font-weight:500;border:none;transition:all .2s;white-space:nowrap;cursor:pointer;font-family:var(--fb)}
+.btn-teal{background:var(--teal);color:#fff}.btn-teal:hover{background:var(--teal-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(13,92,92,.28)}
+.btn-amber{background:var(--amber);color:#fff}.btn-amber:hover{background:#a0600a;transform:translateY(-1px);box-shadow:0 6px 20px rgba(200,120,10,.28)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text-1)}.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-ghost{background:transparent;border:1.5px solid rgba(255,255,255,.4);color:#fff}.btn-ghost:hover{background:rgba(255,255,255,.15)}
+.btn-lg{padding:.8rem 2rem;font-size:.97rem}
+.btn-block{width:100%;justify-content:center;padding:.82rem}
+
+/* BADGE */
+.badge{display:inline-block;padding:.22rem .7rem;border-radius:100px;font-size:.72rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+.b-edu{background:var(--teal-light);color:var(--teal)}.b-skill{background:var(--sage-light);color:var(--sage)}
+.b-biz{background:var(--amber-pale);color:var(--amber)}.b-women{background:var(--purple-light);color:var(--purple)}
+.b-family{background:var(--terra-light);color:var(--terra)}
+
+/* PROGRESS */
+.pw{margin-top:.55rem}.pm{display:flex;justify-content:space-between;font-size:.75rem;color:var(--text-3);margin-bottom:.28rem}.pm strong{color:var(--text-1);font-weight:600}
+.pb{height:6px;border-radius:100px;background:var(--border);overflow:hidden}
+.pf{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--teal),var(--teal-mid));transition:width 1.1s ease}
+.pf.am{background:linear-gradient(90deg,var(--amber),var(--amber-light))}.pf.sg{background:linear-gradient(90deg,var(--sage),#6db37e)}.pf.pp{background:linear-gradient(90deg,var(--purple),#8a6ec2)}
+
+/* CARD */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:box-shadow .25s,transform .25s}
+.card:hover{box-shadow:0 10px 32px var(--shadow);transform:translateY(-3px)}
+.card-thumb{width:100%;height:180px;display:flex;align-items:center;justify-content:center;font-size:2.8rem}
+.card-body{padding:1.15rem}
+.card-title{font-family:var(--fd);font-size:1.08rem;font-weight:600;line-height:1.35;margin:.45rem 0 .4rem}
+.card-desc{font-size:.82rem;color:var(--text-3);line-height:1.65;margin-bottom:.65rem}
+.card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:.85rem;padding-top:.75rem;border-top:1px solid var(--border);font-size:.77rem;color:var(--text-3)}
+
+/* GRID */
+.g3{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.4rem}
+
+/* SECTION HEAD */
+.eyebrow{font-size:.74rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:.5rem}
+.eyebrow::before{content:'';width:18px;height:1.5px;background:var(--teal);display:block}
+.s-title{font-family:var(--fd);font-size:clamp(1.8rem,3.5vw,2.7rem);font-weight:600;line-height:1.15}
+.s-title em{color:var(--teal);font-style:italic}
+.s-sub{color:var(--text-3);font-size:.9rem;line-height:1.8;max-width:520px;margin-top:.55rem}
+
+/* STAT */
+.stat-box{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.3rem 1.6rem;text-align:center}
+.stat-n{font-family:var(--fd);font-size:2.4rem;font-weight:600;color:var(--teal);line-height:1}
+.stat-l{font-size:.77rem;color:var(--text-3);margin-top:.28rem;font-weight:500}
+
+/* FORM */
+.fg{margin-bottom:1.1rem}.fl{display:block;font-size:.79rem;font-weight:600;color:var(--text-2);margin-bottom:.35rem;letter-spacing:.02em}
+.fi,.fs,.ft{width:100%;padding:.7rem 1rem;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--bg-card);font-family:var(--fb);font-size:.87rem;color:var(--text-1);transition:border-color .2s,box-shadow .2s}
+.fi:focus,.fs:focus,.ft:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,92,92,.1)}
+.ft{resize:vertical;min-height:80px}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.f-hint{font-size:.72rem;color:var(--text-3);margin-top:.26rem}
+.f-div{text-align:center;color:var(--text-3);font-size:.78rem;margin:1rem 0;position:relative}
+.f-div::before,.f-div::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border)}
+.f-div::before{left:0}.f-div::after{right:0}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(4,20,20,.55);backdrop-filter:blur(6px);align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:2.2rem;max-width:460px;width:92%;animation:fu .3s ease;position:relative}
+.modal-x{position:absolute;top:.85rem;right:.95rem;background:none;border:none;font-size:1.3rem;color:var(--text-3);cursor:pointer}.modal-x:hover{color:var(--text-1)}
+.modal-title{font-family:var(--fd);font-size:1.5rem;font-weight:600;margin-bottom:.28rem}
+.modal-sub{font-size:.82rem;color:var(--text-3);margin-bottom:1.35rem}
+
+/* AMT BTN */
+.amt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.52rem;margin-bottom:.85rem}
+.amt-btn{padding:.58rem;border:1.5px solid var(--border);border-radius:var(--rs);background:transparent;font-size:.87rem;font-weight:600;color:var(--text-2);cursor:pointer;transition:all .2s;font-family:var(--fb)}
+.amt-btn.sel,.amt-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-light)}
+
+/* FILTER TABS */
+.ftabs{display:flex;gap:.42rem;flex-wrap:wrap}
+.ftab{padding:.4rem 1rem;border-radius:100px;font-size:.82rem;font-weight:500;border:1.5px solid var(--border);background:transparent;color:var(--text-2);cursor:pointer;transition:all .2s;font-family:var(--fb)}
+.ftab.active,.ftab:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:300;background:var(--teal-dark);color:#fff;padding:.88rem 1.4rem;border-radius:var(--r);font-size:.88rem;font-weight:500;box-shadow:0 10px 36px rgba(0,0,0,.25);display:none;animation:fu .3s ease}
+.toast.show{display:block}
+
+/* LAYOUT */
+.container{max-width:1140px;margin:0 auto;padding:0 1.5rem}
+.section{padding:5rem 0}.section-sm{padding:3rem 0}
+hr.dv{border:none;border-top:1px solid var(--border);margin:1.15rem 0}
+
+/* FOOTER */
+.footer{background:var(--teal-dark);color:#fff;padding:3.5rem 0 2rem}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.5rem;margin-bottom:2.5rem}
+.ft-brand p{font-size:.83rem;color:#7ab8b8;line-height:1.8;margin-top:.65rem;max-width:260px}
+.ft-head{font-size:.73rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--amber-light);margin-bottom:.9rem}
+.ft-links li{margin-bottom:.44rem}.ft-links a{font-size:.83rem;color:#7ab8b8;cursor:pointer;transition:color .2s}.ft-links a:hover{color:#fff}
+.ft-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+.ft-bottom p{font-size:.77rem;color:#4a7a7a}
+.ft-logo{font-family:var(--fd);font-size:1.3rem;font-weight:600;color:#fff}.ft-logo span{color:var(--amber-light)}
+.ft-tag{font-size:.7rem;color:#4a7a7a;font-style:italic;margin-top:.14rem}
+.can-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:100px;padding:.24rem .72rem;font-size:.71rem;color:#aacccc;margin-top:.55rem}
+
+/* HOME HERO */
+.hero{background:var(--teal-dark);padding:6rem 0 5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 70% 50%,rgba(26,122,122,.3),transparent);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:4rem;align-items:center;position:relative;z-index:1}
+.hero-tag{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:.36rem 1rem;font-size:.75rem;color:#aadedf;font-weight:500;margin-bottom:1.4rem}
+.hero-h{font-family:var(--fd);font-size:clamp(2.4rem,5vw,3.8rem);font-weight:600;line-height:1.1;color:#fff;margin-bottom:1.1rem}
+.hero-h em{color:var(--amber-light);font-style:italic}
+.hero-p{font-size:.96rem;color:#9ac8c8;line-height:1.85;max-width:460px;margin-bottom:2rem}
+.hero-cta{display:flex;gap:.8rem;flex-wrap:wrap}
+.hero-proof{display:flex;gap:2.5rem;margin-top:2.4rem;padding-top:1.9rem;border-top:1px solid rgba(255,255,255,.1)}
+.hp-v{font-family:var(--fd);font-size:1.85rem;font-weight:600;color:var(--amber-light);line-height:1}
+.hp-l{font-size:.73rem;color:#7ab8b8;margin-top:.18rem}
+.hero-cards{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.hc{border-radius:var(--r);padding:1.25rem;position:relative;overflow:hidden}
+.hc-ico{font-size:1.7rem;margin-bottom:.55rem}
+.hc-t{font-family:var(--fd);font-size:.92rem;font-weight:600;color:#fff;margin-bottom:.22rem}
+.hc-s{font-size:.73rem;color:rgba(255,255,255,.62);line-height:1.5}
+.hc1{background:linear-gradient(135deg,rgba(26,122,122,.7),rgba(13,92,92,.9));border:1px solid rgba(255,255,255,.12);grid-column:span 2}
+.hc2{background:linear-gradient(135deg,rgba(74,124,89,.7),rgba(13,92,92,.8));border:1px solid rgba(255,255,255,.1)}
+.hc3{background:linear-gradient(135deg,rgba(94,74,138,.65),rgba(13,92,92,.85));border:1px solid rgba(255,255,255,.1)}
+.hc4{background:linear-gradient(135deg,rgba(184,76,42,.55),rgba(13,92,92,.85));border:1px solid rgba(255,255,255,.1)}
+.hc5{background:linear-gradient(135deg,rgba(200,120,10,.55),rgba(13,92,92,.85));border:1px solid rgba(255,255,255,.1)}
+
+/* PROGRAMS */
+.prog-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.55rem;transition:box-shadow .25s,transform .25s}
+.prog-card:hover{box-shadow:0 10px 32px var(--shadow);transform:translateY(-3px)}
+.prog-icon{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:.85rem}
+.prog-title{font-family:var(--fd);font-size:1.1rem;font-weight:600;margin-bottom:.38rem}
+.prog-desc{font-size:.82rem;color:var(--text-3);line-height:1.65;margin-bottom:.95rem}
+.prog-list li{font-size:.79rem;color:var(--text-2);padding:.28rem 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.45rem}
+.prog-list li:last-child{border-bottom:none}
+.prog-list li::before{content:'→';color:var(--teal);font-size:.73rem;flex-shrink:0}
+
+/* LOC BAND */
+.loc-band{background:var(--teal-pale);border:1px solid var(--teal-light);border-radius:var(--r);padding:1.1rem 1.5rem;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.loc-item{display:flex;align-items:center;gap:.45rem;font-size:.82rem;font-weight:500;color:var(--teal-dark)}
+.loc-dot{width:7px;height:7px;border-radius:50%;background:var(--teal)}
+
+/* STORY */
+.story-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.story-thumb{height:158px;display:flex;align-items:center;justify-content:center;font-size:2.8rem}
+.story-body{padding:1.15rem}
+.story-title{font-family:var(--fd);font-size:1rem;font-weight:600;margin-bottom:.38rem}
+.story-text{font-size:.81rem;color:var(--text-3);line-height:1.65}
+
+/* PROJECTS PAGE */
+.proj-header{padding:3rem 0 2rem;border-bottom:1px solid var(--border)}
+.proj-header-inner{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+
+/* DETAIL */
+.detail-layout{display:grid;grid-template-columns:1fr 355px;gap:3rem;padding:3rem 0;align-items:start}
+.detail-thumb{width:100%;height:330px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:5rem;margin-bottom:1.7rem}
+.detail-h{font-family:var(--fd);font-size:clamp(1.7rem,3vw,2.3rem);font-weight:600;line-height:1.2;margin:.62rem 0 .65rem}
+.detail-meta{display:flex;gap:1.1rem;flex-wrap:wrap;margin-bottom:1.1rem}
+.detail-meta span{font-size:.79rem;color:var(--text-3);display:flex;align-items:center;gap:.3rem}
+.detail-body{font-size:.92rem;color:var(--text-2);line-height:1.9;margin-bottom:1.5rem}
+.need-item{display:flex;align-items:center;gap:.62rem;padding:.52rem 0;border-bottom:1px solid var(--border);font-size:.84rem;color:var(--text-2)}
+.need-item:last-child{border-bottom:none}
+.need-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.s-panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.65rem;position:sticky;top:80px}
+.s-panel-h{font-family:var(--fd);font-size:1.22rem;font-weight:600;margin-bottom:.24rem}
+.s-panel-sub{font-size:.79rem;color:var(--text-3);margin-bottom:1.25rem}
+.panel-row{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.42rem}
+.panel-row strong{font-weight:600}
+
+/* REGISTER */
+.reg-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:5rem;padding:4rem 0;align-items:start}
+.reg-left{position:sticky;top:80px}
+.reg-h{font-family:var(--fd);font-size:clamp(1.9rem,3.5vw,2.55rem);font-weight:600;line-height:1.15;margin-bottom:.85rem}
+.reg-h em{color:var(--teal);font-style:italic}
+.reg-p{font-size:.88rem;color:var(--text-3);line-height:1.8;margin-bottom:1.75rem}
+.perk{display:flex;gap:.82rem;align-items:flex-start;margin-bottom:1.1rem}
+.perk-ico{width:40px;height:40px;border-radius:10px;background:var(--teal-light);color:var(--teal);display:flex;align-items:center;justify-content:center;font-size:1.02rem;flex-shrink:0}
+.perk-t{font-weight:600;font-size:.87rem;margin-bottom:.17rem}
+.perk-d{font-size:.79rem;color:var(--text-3);line-height:1.6}
+.reg-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:2.2rem}
+.reg-card-h{font-family:var(--fd);font-size:1.42rem;font-weight:600;margin-bottom:.28rem}
+.reg-card-sub{font-size:.81rem;color:var(--text-3);margin-bottom:1.7rem}
+
+/* DASHBOARD */
+.dash-hero{background:var(--teal-dark);padding:2.7rem 0}
+.dash-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
+.dash-greet{font-size:.83rem;color:#7ab8b8;margin-bottom:.24rem}
+.dash-name{font-family:var(--fd);font-size:1.85rem;font-weight:600;color:#fff}
+.dash-since{font-size:.76rem;color:#4a8a8a;margin-top:.28rem}
+.dash-stats{display:flex;gap:2.4rem;flex-wrap:wrap}
+.ds-l{font-size:.72rem;color:#4a8a8a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.14rem}
+.ds-v{font-family:var(--fd);font-size:1.75rem;font-weight:600;color:var(--amber-light);line-height:1}
+.ds-s{font-size:.72rem;color:#7ab8b8;margin-top:.1rem}
+
+.spon-card{display:flex;gap:1.1rem;align-items:flex-start;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.12rem}
+.spon-thumb{width:66px;height:66px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:1.65rem;flex-shrink:0}
+.spon-body{flex:1}
+.spon-title{font-family:var(--fd);font-size:.98rem;font-weight:600}
+.spon-meta{font-size:.76rem;color:var(--text-3);margin-top:.18rem}
+.spon-amt{font-size:.85rem;font-weight:600;color:var(--sage);margin-top:.32rem}
+.pill{display:inline-block;padding:.22rem .72rem;border-radius:100px;font-size:.71rem;font-weight:600}
+.pill-a{background:var(--sage-light);color:var(--sage)}.pill-p{background:var(--amber-pale);color:var(--amber)}.pill-n{background:var(--teal-light);color:var(--teal)}
+
+.success-banner{background:linear-gradient(135deg,var(--sage),#3a6848);color:#fff;border-radius:var(--r);padding:1.55rem 1.75rem;display:flex;align-items:center;gap:1.1rem;animation:fu .4s ease;margin-top:2rem}
+.sb-ico{font-size:1.85rem}
+.sb-t{font-family:var(--fd);font-size:1.25rem;font-weight:600}
+.sb-s{font-size:.82rem;opacity:.85;margin-top:.18rem}
+
+@media(max-width:900px){
+  .hero-grid,.detail-layout,.reg-layout{grid-template-columns:1fr}
+  .hero-cards,.ft-grid{grid-template-columns:1fr 1fr}
+  .reg-left{position:static}.dash-stats{gap:1.4rem}
+}
+@media(max-width:640px){
+  .nav-links{display:none}.f-row{grid-template-columns:1fr}.ft-grid{grid-template-columns:1fr}
+  .hero-proof{gap:1.4rem;flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="logo" onclick="go('home')">
+    <div class="logo-n">N</div>
+    <div><div class="logo-text">Nesakkarangal</div><span class="logo-sub">nesakkarangal.org</span></div>
+  </div>
+  <ul class="nav-links">
+    <li><span class="nav-link" id="nl-home" onclick="go('home')">Home</span></li>
+    <li><span class="nav-link" id="nl-projects" onclick="go('projects')">Projects</span></li>
+    <li><span class="nav-link" onclick="go('home')">About</span></li>
+    <li><span class="nav-link" onclick="go('home')">Stories</span></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn btn-outline" onclick="go('dashboard')">Sponsor Login</button>
+    <button class="btn btn-amber" onclick="go('register')">Become a Sponsor</button>
+  </div>
+</nav>
+
+
+<!-- ═══════ PAGE: HOME ═══════ -->
+<div class="page active" id="page-home">
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-tag">🍁 Built by Tamil Canadians &nbsp;·&nbsp; 📍 Northern Sri Lanka</div>
+          <h1 class="hero-h">Touching Hearts,<br/><em>Changing Lives</em></h1>
+          <p class="hero-p">Supporting education, empowering women, and assisting families across Mannar, Vanni, and Northern Sri Lanka through community-led tuition centres, sewing projects, micro-business support, and family care.</p>
+          <div class="hero-cta">
+            <button class="btn btn-amber btn-lg" onclick="go('projects')">Browse Projects →</button>
+            <button class="btn btn-ghost btn-lg" onclick="go('register')">Become a Sponsor</button>
+          </div>
+          <div class="hero-proof">
+            <div><div class="hp-v">700+</div><div class="hp-l">Women Trained</div></div>
+            <div><div class="hp-v">300+</div><div class="hp-l">Students Supported</div></div>
+            <div><div class="hp-v">11+</div><div class="hp-l">Active Centres</div></div>
+            <div><div class="hp-v">100+</div><div class="hp-l">Businesses Supported</div></div>
+          </div>
+        </div>
+        <div class="hero-cards">
+          <div class="hc hc1"><div class="hc-ico">🎓</div><div class="hc-t">Education &amp; Tuition Centres</div><div class="hc-s">After-school coaching, exam prep &amp; school supplies — Mannar &amp; beyond</div></div>
+          <div class="hc hc2"><div class="hc-ico">🧵</div><div class="hc-t">Sewing &amp; Skills Training</div><div class="hc-s">700+ women trained, 2 stores live</div></div>
+          <div class="hc hc3"><div class="hc-ico">👩</div><div class="hc-t">Women Empowerment</div><div class="hc-s">Seed funds &amp; micro-enterprise groups</div></div>
+          <div class="hc hc4"><div class="hc-ico">🏡</div><div class="hc-t">Family Support</div><div class="hc-s">Food, medical, housing &amp; bicycles</div></div>
+          <div class="hc hc5"><div class="hc-ico">🌱</div><div class="hc-t">Micro-Business Loans</div><div class="hc-s">100+ businesses started &amp; supported</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container" style="margin-top:2.5rem;">
+    <div class="loc-band">
+      <span style="font-size:.76rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;">Active In:</span>
+      <div class="loc-item"><div class="loc-dot"></div>Mannar</div>
+      <div class="loc-item"><div class="loc-dot"></div>Vanni</div>
+      <div class="loc-item"><div class="loc-dot"></div>Mullaithivu</div>
+      <div class="loc-item"><div class="loc-dot"></div>Vavuniya</div>
+      <div class="loc-item"><div class="loc-dot"></div>Malayagam</div>
+      <div class="loc-item" style="margin-left:auto;"><div class="loc-dot" style="background:var(--amber)"></div>Coordinated from Canada 🍁</div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div style="margin-bottom:2.7rem;">
+        <div class="eyebrow">Our 5 Main Programs</div>
+        <h2 class="s-title">From Crisis to <em>Growth</em></h2>
+        <p class="s-sub">Each program moves families from crisis to stability, and from stability to long-term growth.</p>
+      </div>
+      <div class="g3">
+        <div class="prog-card">
+          <div class="prog-icon" style="background:var(--teal-light)">🎓</div>
+          <div class="prog-title">Education &amp; Tuition Centres</div>
+          <div class="prog-desc">After-school tuition, exam coaching, stationery &amp; school supplies. Many students are the first in their family to reach higher grades.</div>
+          <ul class="prog-list"><li>Penpal Program (Canada ↔ Sri Lanka)</li><li>One-to-One Sponsorship</li><li>11+ Tuition Centres active</li></ul>
+          <button class="btn btn-outline" style="width:100%;justify-content:center;margin-top:1rem;font-size:.81rem;" onclick="fag('edu')">View Projects →</button>
+        </div>
+        <div class="prog-card">
+          <div class="prog-icon" style="background:var(--sage-light)">🧵</div>
+          <div class="prog-title">Skills Development</div>
+          <div class="prog-desc">Practical sewing training and computer education — creating sustainable livelihoods and independence for women across Northern Sri Lanka.</div>
+          <ul class="prog-list"><li>Sewing Training Centres</li><li>2 Sewing Stores live</li><li>Women Empowerment Workshops</li></ul>
+          <button class="btn btn-outline" style="width:100%;justify-content:center;margin-top:1rem;font-size:.81rem;" onclick="fag('skill')">View Projects →</button>
+        </div>
+        <div class="prog-card">
+          <div class="prog-icon" style="background:var(--amber-pale)">🌱</div>
+          <div class="prog-title">Business Development &amp; Micro-Loans</div>
+          <div class="prog-desc">Repayable micro-loans and structured follow-up to help families start and grow income-generating businesses.</div>
+          <ul class="prog-list"><li>100+ businesses supported</li><li>Jobs created tracking</li><li>Revolving loan fund</li></ul>
+          <button class="btn btn-outline" style="width:100%;justify-content:center;margin-top:1rem;font-size:.81rem;" onclick="fag('biz')">View Projects →</button>
+        </div>
+        <div class="prog-card">
+          <div class="prog-icon" style="background:var(--purple-light)">👩</div>
+          <div class="prog-title">Women Empowerment Projects</div>
+          <div class="prog-desc">300+ women's groups of 5–15 members receive Rs. 2,500 seed funds for micro-enterprises — palmyra products, candles, soap, and more.</div>
+          <ul class="prog-list"><li>Women's Economic Empowerment Fund</li><li>Some groups grown to Rs. 10 Lakhs</li><li>Mannar, Vanni &amp; Mullaithivu</li></ul>
+          <button class="btn btn-outline" style="width:100%;justify-content:center;margin-top:1rem;font-size:.81rem;" onclick="fag('women')">View Projects →</button>
+        </div>
+        <div class="prog-card">
+          <div class="prog-icon" style="background:var(--terra-light)">🏡</div>
+          <div class="prog-title">Family Support &amp; Care</div>
+          <div class="prog-desc">Food assistance, medical supplies, housing &amp; washroom construction, bicycles for students, eyeglasses. Supporting Maveerar families and disaster relief.</div>
+          <ul class="prog-list"><li>Mullaitivu, Mannar, Vavuniya</li><li>Malayagam communities</li><li>Emergency &amp; disaster response</li></ul>
+          <button class="btn btn-outline" style="width:100%;justify-content:center;margin-top:1rem;font-size:.81rem;" onclick="fag('family')">View Projects →</button>
+        </div>
+        <div class="prog-card" style="background:var(--teal);border-color:var(--teal);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;min-height:260px;" onclick="go('register')">
+          <div style="font-size:2rem;margin-bottom:.85rem;">❤️</div>
+          <div class="prog-title" style="color:#fff;margin-bottom:.45rem;">Ready to Help?</div>
+          <div class="prog-desc" style="color:rgba(255,255,255,.72);max-width:215px;">Register as a sponsor and support projects from Canada, UK, US, or anywhere.</div>
+          <button class="btn" style="background:#fff;color:var(--teal);font-weight:600;margin-top:.95rem;">Register Free →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Status -->
+  <section class="section-sm" style="background:var(--teal-pale);border-top:1px solid var(--teal-light);border-bottom:1px solid var(--teal-light);">
+    <div class="container">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:2rem;">
+        <div>
+          <div class="eyebrow">Live Project Status</div>
+          <h3 style="font-family:var(--fd);font-size:1.38rem;font-weight:600;margin-top:.4rem;">Current Activity Snapshot</h3>
+          <p style="font-size:.8rem;color:var(--text-3);margin-top:.3rem;">Updated manually by coordinators — full dashboard at nesakkarangal.org/project_status</p>
+        </div>
+        <div style="overflow-x:auto;flex:1;min-width:300px;">
+          <table style="width:100%;border-collapse:collapse;font-size:.83rem;">
+            <thead><tr style="background:var(--teal);color:#fff;">
+              <th style="padding:.62rem 1rem;text-align:left;border-radius:var(--rs) 0 0 0;font-weight:500;">Category</th>
+              <th style="padding:.62rem 1rem;text-align:left;font-weight:500;">Location</th>
+              <th style="padding:.62rem 1rem;text-align:left;font-weight:500;">Status</th>
+              <th style="padding:.62rem 1rem;text-align:left;border-radius:0 var(--rs) 0 0;font-weight:500;">Updated</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border);"><td style="padding:.62rem 1rem;">🎓 Tuition Centre</td><td style="padding:.62rem 1rem;">Mannar</td><td style="padding:.62rem 1rem;"><span style="color:var(--sage);font-weight:600;">● Active</span></td><td style="padding:.62rem 1rem;color:var(--text-3);">Nov 2025</td></tr>
+              <tr style="border-bottom:1px solid var(--border);background:#f5fcfc;"><td style="padding:.62rem 1rem;">🧵 Sewing Centre</td><td style="padding:.62rem 1rem;">Mullaithivu</td><td style="padding:.62rem 1rem;"><span style="color:var(--amber);font-weight:600;">● Opening Nov 2025</span></td><td style="padding:.62rem 1rem;color:var(--text-3);">Nov 2025</td></tr>
+              <tr style="border-bottom:1px solid var(--border);"><td style="padding:.62rem 1rem;">🌱 Micro Business</td><td style="padding:.62rem 1rem;">Mannar</td><td style="padding:.62rem 1rem;"><span style="color:var(--teal);font-weight:600;">● Ongoing</span></td><td style="padding:.62rem 1rem;color:var(--text-3);">Oct 2025</td></tr>
+              <tr><td style="padding:.62rem 1rem;">🏡 Family Support</td><td style="padding:.62rem 1rem;">Vanni</td><td style="padding:.62rem 1rem;"><span style="color:var(--purple);font-weight:600;">● 4 Families Assisted</span></td><td style="padding:.62rem 1rem;color:var(--text-3);">Oct 2025</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stories -->
+  <section class="section">
+    <div class="container">
+      <div style="margin-bottom:2.4rem;"><div class="eyebrow">Stories</div><h2 class="s-title">Lives <em>Touched</em></h2></div>
+      <div class="g3">
+        <div class="story-card"><div class="story-thumb" style="background:linear-gradient(135deg,#d4e8e8,#8acaca);">🧵</div><div class="story-body"><div class="story-title">From Training to Storefront</div><div class="story-text">Women in Mullaithivu who completed sewing training are now opening a dedicated store. Stitching uniforms and household items for the community with shared responsibility.</div><div style="margin-top:.85rem;"><span class="badge b-skill">Skills</span><span style="font-size:.74rem;color:var(--text-3);margin-left:.5rem;">Mullaithivu</span></div></div></div>
+        <div class="story-card"><div class="story-thumb" style="background:linear-gradient(135deg,#c8dfcc,#7ab888);">📚</div><div class="story-body"><div class="story-title">Keeping Students in School</div><div class="story-text">Several children at risk of dropping out — families couldn't afford tuition. They now have regular coaching, guidance, and school supplies to stay on track.</div><div style="margin-top:.85rem;"><span class="badge b-edu">Education</span><span style="font-size:.74rem;color:var(--text-3);margin-left:.5rem;">Mannar</span></div></div></div>
+        <div class="story-card"><div class="story-thumb" style="background:linear-gradient(135deg,#f5d5cb,#d4896a);">🏡</div><div class="story-body"><div class="story-title">From Emergency to Stability</div><div class="story-text">One family received structured support to rebuild income with follow-ups. With basic equipment and monthly check-ins, slowly rebuilding confidence and stability.</div><div style="margin-top:.85rem;"><span class="badge b-family">Family</span><span style="font-size:.74rem;color:var(--text-3);margin-left:.5rem;">Vanni</span></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="background:var(--teal-dark);padding:5rem 0;text-align:center;">
+    <div class="container">
+      <div class="eyebrow" style="justify-content:center;color:#7acdcd;">Get Involved</div>
+      <h2 style="font-family:var(--fd);font-size:clamp(2rem,4vw,2.8rem);color:#fff;font-weight:600;margin:.75rem 0 .95rem;">Ready to Support a Child, a Woman, or a Family?</h2>
+      <p style="color:#7ab8b8;font-size:.91rem;max-width:520px;margin:0 auto 1.9rem;line-height:1.85;">Whether you can help monthly or one-time, your support is handled carefully and shared transparently.</p>
+      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-amber btn-lg" onclick="go('register')">❤️ Become a Monthly Sponsor</button>
+        <button class="btn btn-ghost btn-lg" onclick="fag('edu')">🎒 Sponsor a Student</button>
+        <button class="btn btn-ghost btn-lg" onclick="fag('skill')">🧵 Support a Women's Group</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="ft-grid">
+        <div>
+          <div class="ft-logo">Nesak<span>karangal</span></div>
+          <div class="ft-tag">Touching Hearts, Changing Lives</div>
+          <p>A charity initiative supporting education, women empowerment, and family support programs across Northern Sri Lanka — coordinated by Tamil Canadian volunteers.</p>
+          <div class="can-badge">🍁 Built by Tamil Canadians · Registered Charity ✅</div>
+          <div style="margin-top:.8rem;font-size:.8rem;color:#7ab8b8;">info@nesakkarangal.org</div>
+        </div>
+        <div>
+          <div class="ft-head">Programs</div>
+          <ul class="ft-links">
+            <li><a onclick="fag('edu')">Education &amp; Tuition</a></li>
+            <li><a onclick="fag('skill')">Sewing &amp; Skills</a></li>
+            <li><a onclick="fag('biz')">Micro-Business</a></li>
+            <li><a onclick="fag('women')">Women Empowerment</a></li>
+            <li><a onclick="fag('family')">Family Support</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ft-head">Organisation</div>
+          <ul class="ft-links">
+            <li><a>About Us</a></li>
+            <li><a onclick="go('projects')">Live Project Status</a></li>
+            <li><a>Impact Stories</a></li>
+            <li><a>Penpal Program</a></li>
+            <li><a>Student Sponsorship</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="ft-head">Connect</div>
+          <ul class="ft-links">
+            <li><a>info@nesakkarangal.org</a></li>
+            <li><a>WhatsApp · Sri Lanka</a></li>
+            <li><a>WhatsApp · Canada</a></li>
+            <li><a onclick="go('register')">Become a Sponsor</a></li>
+            <li><a onclick="go('dashboard')">Sponsor Dashboard</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="ft-bottom">
+        <p>© 2025 Nesakkarangal · All Rights Reserved · Registered Charity Initiative ✅</p>
+        <div style="display:flex;gap:1rem;"><span style="font-size:.77rem;color:#4a7a7a;cursor:pointer;">Facebook</span><span style="font-size:.77rem;color:#4a7a7a;cursor:pointer;">Instagram</span><span style="font-size:.77rem;color:#4a7a7a;cursor:pointer;">YouTube</span></div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+
+<!-- ═══════ PAGE: PROJECTS ═══════ -->
+<div class="page" id="page-projects">
+  <div class="proj-header">
+    <div class="container">
+      <div style="font-size:.79rem;color:var(--text-3);margin-bottom:.8rem;cursor:pointer;" onclick="go('home')">Home › All Projects</div>
+      <div class="proj-header-inner">
+        <div>
+          <h1 class="s-title">Sponsor a <em>Project</em></h1>
+          <p style="font-size:.83rem;color:var(--text-3);margin-top:.3rem;" id="proj-count">Showing 7 projects across Northern Sri Lanka</p>
+        </div>
+        <div class="ftabs" id="fTabs">
+          <button class="ftab active" onclick="filt(this,'all')">All</button>
+          <button class="ftab" onclick="filt(this,'edu')">🎓 Education</button>
+          <button class="ftab" onclick="filt(this,'skill')">🧵 Sewing &amp; Skills</button>
+          <button class="ftab" onclick="filt(this,'biz')">🌱 Micro-Business</button>
+          <button class="ftab" onclick="filt(this,'women')">👩 Women</button>
+          <button class="ftab" onclick="filt(this,'family')">🏡 Family</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding:2.5rem 0 5rem;">
+    <div class="g3" id="projGrid">
+
+      <div class="card pcard" data-cat="edu" onclick="det('student')" style="cursor:pointer;">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#d8eeee,#7acdcd);">🎒</div>
+        <div class="card-body">
+          <span class="badge b-edu">Education</span>
+          <div class="card-title">One-to-One Student Sponsorship</div>
+          <div class="card-desc">Sponsor a named child in Mannar or Vanni for a full academic year — tuition, school supplies, and exam fees.</div>
+          <div class="pw"><div class="pm"><span>21 of 40 spots filled</span><strong>40 students need sponsors</strong></div><div class="pb"><div class="pf" style="width:52%"></div></div></div>
+          <div class="card-foot"><span>🍁 12 Canadian sponsors</span><span style="color:var(--terra);font-weight:600;">19 spots left</span></div>
+        </div>
+      </div>
+
+      <div class="card pcard" data-cat="edu" onclick="det('penpal')" style="cursor:pointer;">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#d8e8ff,#8aabde);">✉️</div>
+        <div class="card-body">
+          <span class="badge b-edu">Education</span>
+          <div class="card-title">Penpal Program — Canada ↔ Northern Sri Lanka</div>
+          <div class="card-desc">Match a Canadian student with a child in Mannar or Vanni. Cultural exchange, language building, lifelong connection.</div>
+          <div class="pw"><div class="pm"><span>34 pairs matched</span><strong>50 pairs goal</strong></div><div class="pb"><div class="pf" style="width:68%"></div></div></div>
+          <div class="card-foot"><span>✉️ 34 active pairs</span><span style="color:var(--sage);font-weight:600;">16 spots open</span></div>
+        </div>
+      </div>
+
+      <div class="card pcard" data-cat="edu" onclick="det('tuition')" style="cursor:pointer;">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#c8dfcc,#7ab888);">📖</div>
+        <div class="card-body">
+          <span class="badge b-edu">Education</span>
+          <div class="card-title">Tuition Centre Fund — Mannar (Active)</div>
+          <div class="card-desc">Keep the Mannar tuition centre running — teacher stipends, stationery, and lighting for 40+ students in evening classes.</div>
+          <div class="pw"><div class="pm"><span>Rs. 45,000 raised</span><strong>Rs. 75,000 goal</strong></div><div class="pb"><div class="pf" style="width:60%"></div></div></div>
+          <div class="card-foot"><span>👤 18 sponsors</span><span style="color:var(--terra);font-weight:600;">40% remaining</span></div>
+        </div>
+      </div>
+
+      <div class="card pcard" data-cat="skill" onclick="det('sewing')" style="cursor:pointer;">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#d2e8d8,#6baa88);">🧵</div>
+        <div class="card-body">
+          <span class="badge b-skill">Skills Development</span>
+          <div class="card-title">Sewing Centre Launch — Mullaithivu</div>
+          <div class="card-desc">Fund equipment and first-month operations for the new sewing centre — training 30 women in the first batch from Nov 2025.</div>
+          <div class="pw"><div class="pm"><span>Rs. 62,000 raised</span><strong>Rs. 90,000 goal</strong></div><div class="pb"><div class="pf sg" style="width:69%"></div></div></div>
+          <div class="card-foot"><span>👤 22 sponsors</span><span style="color:var(--amber);font-weight:600;">Opening Nov 2025</span></div>
+        </div>
+      </div>
+
+      <div class="card pcard" data-cat="women" onclick="det('women')" style="cursor:pointer;">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#ece8f8,#bba8e4);">👩</div>
+        <div class="card-body">
+          <span class="badge b-women">Women Empowerment</span>
+          <div class="card-title">Women's Seed Fund — New Group, Vanni</div>
+          <div class="card-desc">Seed fund for a new group of 10 women in Vanni — palmyra &amp; handicraft products. Rs. 2,500 per member.</div>
+          <div class="pw"><div class="pm"><span>Rs. 18,000 raised</span><strong>Rs. 25,000 goal</strong></div><div class="pb"><div class="pf pp" style="width:72%"></div></div></div>
+          <div class="card-foot"><span>👤 9 sponsors</span><span style="color:var(--terra);font-weight:600;">Rs. 7,000 left</span></div>
+        </div>
+      </div>
+
+      <div class="card pcard" data-cat="biz" onclick="det('microloan')" style="cursor:pointer;">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#fde8c0,#f0b040);">🌱</div>
+        <div class="card-body">
+          <span class="badge b-biz">Micro-Business</span>
+          <div class="card-title">Micro-Loan Revolving Fund — Mannar District</div>
+          <div class="card-desc">Repayable revolving micro-loan fund for small businesses in Mannar. Loans are repaid and re-deployed — every rupee helps twice.</div>
+          <div class="pw"><div class="pm"><span>Rs. 1,20,000 raised</span><strong>Rs. 2,00,000 goal</strong></div><div class="pb"><div class="pf am" style="width:60%"></div></div></div>
+          <div class="card-foot"><span>👤 35 sponsors</span><span style="color:var(--sage);font-weight:600;">Ongoing</span></div>
+        </div>
+      </div>
+
+      <div class="card pcard" data-cat="family" onclick="det('family')" style="cursor:pointer;">
+        <div class="card-thumb" style="background:linear-gradient(135deg,#fae0d8,#e08868);">🏡</div>
+        <div class="card-body">
+          <span class="badge b-family">Family Support</span>
+          <div class="card-title">Family Care Fund — Mullaitivu &amp; Vavuniya</div>
+          <div class="card-desc">Food packs, medical aid, bicycles for school students, and washroom construction for 4 families identified this quarter.</div>
+          <div class="pw"><div class="pm"><span>Rs. 38,000 raised</span><strong>Rs. 60,000 goal</strong></div><div class="pb"><div class="pf" style="width:63%"></div></div></div>
+          <div class="card-foot"><span>👤 14 sponsors</span><span style="color:var(--terra);font-weight:600;">37% remaining</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ PAGE: DETAIL ═══════ -->
+<div class="page" id="page-detail">
+  <div class="container">
+    <div style="padding:1.7rem 0 .3rem;font-size:.79rem;color:var(--text-3);cursor:pointer;" onclick="go('projects')">← Back to Projects</div>
+    <div class="detail-layout">
+      <div>
+        <div class="detail-thumb" id="d-thumb" style="background:linear-gradient(135deg,#d8eeee,#7acdcd);">🎒</div>
+        <span id="d-badge"></span>
+        <h1 class="detail-h" id="d-title"></h1>
+        <div class="detail-meta" id="d-meta"></div>
+        <p class="detail-body" id="d-body"></p>
+        <div id="d-needs"></div>
+      </div>
+      <div>
+        <div class="s-panel">
+          <div class="s-panel-h">Sponsor This Project</div>
+          <div class="s-panel-sub">100% of funds go directly to beneficiaries. Every contribution is tracked and reported transparently.</div>
+          <div class="pw" style="margin-bottom:.95rem;"><div class="pm" id="d-pm"></div><div class="pb"><div class="pf" id="d-pf" style="width:60%"></div></div></div>
+          <div class="panel-row"><span>Sponsors</span><strong id="d-sponsors">—</strong></div>
+          <div class="panel-row"><span>Still needed</span><strong style="color:var(--terra);" id="d-rem">—</strong></div>
+          <div class="panel-row"><span>Currencies accepted</span><strong>LKR · CAD · USD · GBP</strong></div>
+          <hr class="dv"/>
+          <div style="font-size:.79rem;font-weight:600;color:var(--text-2);margin-bottom:.55rem;">Select your contribution:</div>
+          <div class="amt-grid" id="amtGrid">
+            <button class="amt-btn sel" onclick="sa(this,'CAD 25')">CAD 25</button>
+            <button class="amt-btn" onclick="sa(this,'CAD 50')">CAD 50</button>
+            <button class="amt-btn" onclick="sa(this,'CAD 100')">CAD 100</button>
+            <button class="amt-btn" onclick="sa(this,'Rs. 2,500')">Rs. 2,500</button>
+            <button class="amt-btn" onclick="sa(this,'Rs. 5,000')">Rs. 5,000</button>
+            <button class="amt-btn" onclick="sa(this,'custom')">Custom</button>
+          </div>
+          <div id="customWrap" style="display:none;margin-bottom:.8rem;"><input class="fi" type="text" placeholder="e.g. CAD 75 or Rs. 8000" id="customInput"/></div>
+          <button class="btn btn-amber btn-block" onclick="openModal()">Sponsor Now →</button>
+          <p style="font-size:.69rem;color:var(--text-3);text-align:center;margin-top:.6rem;">🔒 Secure · Transparent reporting · Tax receipt available</p>
+          <hr class="dv"/>
+          <button class="btn btn-outline btn-block" style="font-size:.81rem;" onclick="go('register')">New sponsor? Register free →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ PAGE: REGISTER ═══════ -->
+<div class="page" id="page-register">
+  <div class="container">
+    <div class="reg-layout">
+      <div class="reg-left">
+        <div class="eyebrow" style="margin-bottom:1rem;">Join Nesakkarangal</div>
+        <h2 class="reg-h">Become a <em>Sponsor</em></h2>
+        <p class="reg-p">Create your free account in 2 minutes. Support children, women, and families in Northern Sri Lanka — from anywhere in the world.</p>
+        <div class="perk"><div class="perk-ico">📊</div><div><div class="perk-t">Transparent Impact Tracking</div><div class="perk-d">See exactly how your money is used — photo &amp; field update reports from coordinators.</div></div></div>
+        <div class="perk"><div class="perk-ico">🧾</div><div><div class="perk-t">Tax Receipt Provided</div><div class="perk-d">Donation receipts for Canadian, UK, and US sponsors for tax filing purposes.</div></div></div>
+        <div class="perk"><div class="perk-ico">✉️</div><div><div class="perk-t">Direct Updates from Families</div><div class="perk-d">Letters, photos, and progress updates from the children and families you support.</div></div></div>
+        <div class="perk"><div class="perk-ico">🌍</div><div><div class="perk-t">Sponsor from Anywhere</div><div class="perk-d">We accept CAD, USD, GBP, LKR and more. FCRA-compliant for international contributions.</div></div></div>
+        <div class="perk"><div class="perk-ico">🔄</div><div><div class="perk-t">Revolving Micro-Loans</div><div class="perk-d">Loan repayments re-fund new families — your money multiplies its impact over time.</div></div></div>
+      </div>
+      <div>
+        <div class="reg-card">
+          <div class="reg-card-h">Create Your Account</div>
+          <div class="reg-card-sub">Already a sponsor? <span style="color:var(--teal);cursor:pointer;font-weight:600;" onclick="showToast('Sign-in — coming in next build!')">Sign in here →</span></div>
+          <form onsubmit="handleReg(event)">
+            <div class="f-row">
+              <div class="fg"><label class="fl">First Name *</label><input class="fi" type="text" placeholder="Ananthan" required/></div>
+              <div class="fg"><label class="fl">Last Name *</label><input class="fi" type="text" placeholder="Murugan" required/></div>
+            </div>
+            <div class="fg"><label class="fl">Email Address *</label><input class="fi" type="email" placeholder="you@example.com" required/></div>
+            <div class="fg"><label class="fl">Phone (WhatsApp preferred)</label><input class="fi" type="tel" placeholder="+1 416 555 0100"/><div class="f-hint">Optional — for project updates via WhatsApp</div></div>
+            <div class="f-row">
+              <div class="fg"><label class="fl">Country *</label><select class="fs" required><option value="">Select country</option><option value="CA" selected>🍁 Canada</option><option value="UK">🇬🇧 United Kingdom</option><option value="US">🇺🇸 United States</option><option value="AU">🇦🇺 Australia</option><option value="DE">🇩🇪 Germany</option><option value="LK">🇱🇰 Sri Lanka</option><option value="SG">🇸🇬 Singapore</option><option value="other">Other</option></select></div>
+              <div class="fg"><label class="fl">Preferred Currency</label><select class="fs"><option>CAD — Canadian Dollar</option><option>USD — US Dollar</option><option>GBP — British Pound</option><option>LKR — Sri Lankan Rupee</option><option>AUD — Australian Dollar</option></select></div>
+            </div>
+            <div class="fg"><label class="fl">I want to support</label><select class="fs"><option>All Programs</option><option>Education &amp; Tuition Centres</option><option>Sewing &amp; Skills Training</option><option>Women's Empowerment Fund</option><option>Micro-Business &amp; Loans</option><option>Family Support &amp; Care</option><option>Penpal Program (Canada ↔ Sri Lanka)</option></select></div>
+            <div class="fg"><label class="fl">Sponsorship Type</label><select class="fs"><option>Monthly recurring sponsor</option><option>One-time project sponsor</option><option>One-to-one student sponsor</option><option>Penpal volunteer</option></select></div>
+            <div class="fg"><label class="fl">Password *</label><input class="fi" type="password" placeholder="Min. 8 characters" required/></div>
+            <div class="fg"><label style="display:flex;gap:.52rem;align-items:flex-start;font-size:.79rem;color:var(--text-3);cursor:pointer;"><input type="checkbox" style="margin-top:2px;" required/>I agree to Nesakkarangal's <span style="color:var(--teal);font-weight:600;">&nbsp;Terms &amp; Privacy Policy</span></label></div>
+            <button type="submit" class="btn btn-teal btn-block" style="font-size:.96rem;">Create Sponsor Account →</button>
+            <div class="f-div">or</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem;">
+              <button type="button" class="btn btn-outline" style="justify-content:center;" onclick="showToast('Google sign-in — coming soon!')">🔵 Google</button>
+              <button type="button" class="btn btn-outline" style="justify-content:center;" onclick="showToast('Facebook sign-in — coming soon!')">🔷 Facebook</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ PAGE: DASHBOARD ═══════ -->
+<div class="page" id="page-dashboard">
+  <div class="dash-hero">
+    <div class="container">
+      <div class="dash-inner">
+        <div>
+          <div class="dash-greet">Welcome back,</div>
+          <div class="dash-name">Ananthan Murugan 👋</div>
+          <div class="dash-since">Sponsor since Jan 2025 · Toronto, Canada 🍁 · Sponsor ID: SP-042</div>
+        </div>
+        <div class="dash-stats">
+          <div><div class="ds-l">Total Agreed</div><div class="ds-v">CAD 175</div><div class="ds-s">3 projects</div></div>
+          <div><div class="ds-l">Received</div><div class="ds-v">CAD 125</div><div class="ds-s">2 payments done</div></div>
+          <div><div class="ds-l">Balance / Pending</div><div class="ds-v">CAD 50</div><div class="ds-s">1 pending</div></div>
+          <div><div class="ds-l">Families Helped</div><div class="ds-v">12+</div><div class="ds-s">students &amp; women</div></div>
+        </div>
+        <button class="btn btn-amber" onclick="go('projects')">+ Add Sponsorship</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div id="dashSuccess" style="display:none;">
+      <div class="success-banner"><div class="sb-ico">🎉</div><div><div class="sb-t">Sponsorship Confirmed — Thank You!</div><div class="sb-s">You'll receive a WhatsApp/email update within 3 days and a full photo report within 2 weeks.</div></div></div>
+    </div>
+
+    <!-- Sponsor table (mirrors real dashboard fields) -->
+    <div style="padding:2.4rem 0 1rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;flex-wrap:wrap;gap:.8rem;">
+        <h3 style="font-family:var(--fd);font-size:1.38rem;font-weight:600;">My Sponsorships</h3>
+        <div style="font-size:.78rem;color:var(--text-3);">Sponsor ID: SP-042 · Active Status: ✅</div>
+      </div>
+      <div style="overflow-x:auto;margin-bottom:1.5rem;">
+        <table style="width:100%;border-collapse:collapse;font-size:.82rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;">
+          <thead><tr style="background:var(--teal-pale);border-bottom:1px solid var(--border);">
+            <th style="padding:.65rem 1rem;text-align:left;font-weight:600;color:var(--text-2);">Project ID / Name</th>
+            <th style="padding:.65rem 1rem;text-align:left;font-weight:600;color:var(--text-2);">Currency</th>
+            <th style="padding:.65rem 1rem;text-align:left;font-weight:600;color:var(--text-2);">Agreed</th>
+            <th style="padding:.65rem 1rem;text-align:left;font-weight:600;color:var(--text-2);">Received</th>
+            <th style="padding:.65rem 1rem;text-align:left;font-weight:600;color:var(--text-2);">Balance</th>
+            <th style="padding:.65rem 1rem;text-align:left;font-weight:600;color:var(--text-2);">Pending</th>
+            <th style="padding:.65rem 1rem;text-align:left;font-weight:600;color:var(--text-2);">Method</th>
+            <th style="padding:.65rem 1rem;text-align:left;font-weight:600;color:var(--text-2);">Status</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:.7rem 1rem;">PRJ-001 · Student Sponsorship — Mannar</td><td style="padding:.7rem 1rem;">CAD</td><td style="padding:.7rem 1rem;font-weight:600;">75</td><td style="padding:.7rem 1rem;color:var(--sage);font-weight:600;">75</td><td style="padding:.7rem 1rem;">0</td><td style="padding:.7rem 1rem;">0</td><td style="padding:.7rem 1rem;">E-Transfer</td><td style="padding:.7rem 1rem;"><span class="pill pill-a">Active</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);background:#f5fcfc;"><td style="padding:.7rem 1rem;">PRJ-004 · Sewing Centre — Mullaithivu</td><td style="padding:.7rem 1rem;">CAD</td><td style="padding:.7rem 1rem;font-weight:600;">50</td><td style="padding:.7rem 1rem;color:var(--sage);font-weight:600;">50</td><td style="padding:.7rem 1rem;">0</td><td style="padding:.7rem 1rem;">0</td><td style="padding:.7rem 1rem;">PayPal</td><td style="padding:.7rem 1rem;"><span class="pill pill-a">Active</span></td></tr>
+            <tr><td style="padding:.7rem 1rem;">PRJ-005 · Women's Fund — Vanni</td><td style="padding:.7rem 1rem;">CAD</td><td style="padding:.7rem 1rem;font-weight:600;">50</td><td style="padding:.7rem 1rem;color:var(--amber);font-weight:600;">0</td><td style="padding:.7rem 1rem;color:var(--terra);font-weight:600;">50</td><td style="padding:.7rem 1rem;color:var(--terra);">50</td><td style="padding:.7rem 1rem;">E-Transfer</td><td style="padding:.7rem 1rem;"><span class="pill pill-p">Pending</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:.85rem;">
+        <div class="spon-card"><div class="spon-thumb" style="background:linear-gradient(135deg,#d8eeee,#7acdcd);">🎒</div><div class="spon-body"><div class="spon-title">One-to-One Student Sponsorship — Mannar</div><div class="spon-meta">📍 Mannar, Northern Sri Lanka · Education · 21 total sponsors</div><div class="spon-amt">CAD 75 agreed · CAD 75 received ✅</div><div class="pw" style="margin-top:.45rem;"><div class="pm"><span>21 of 40 spots filled</span><strong>40 students</strong></div><div class="pb"><div class="pf" style="width:52%"></div></div></div></div><span class="pill pill-a">Active</span></div>
+        <div class="spon-card"><div class="spon-thumb" style="background:linear-gradient(135deg,#d2e8d8,#6baa88);">🧵</div><div class="spon-body"><div class="spon-title">Sewing Centre Launch — Mullaithivu</div><div class="spon-meta">📍 Mullaithivu · Skills Development · 22 total sponsors</div><div class="spon-amt">CAD 50 agreed · CAD 50 received ✅</div><div class="pw" style="margin-top:.45rem;"><div class="pm"><span>Rs. 62,000 raised</span><strong>Rs. 90,000 goal</strong></div><div class="pb"><div class="pf sg" style="width:69%"></div></div></div></div><span class="pill pill-a">Active</span></div>
+        <div class="spon-card"><div class="spon-thumb" style="background:linear-gradient(135deg,#ece8f8,#bba8e4);">👩</div><div class="spon-body"><div class="spon-title">Women's Seed Fund — Vanni</div><div class="spon-meta">📍 Vanni · Women Empowerment · 9 total sponsors</div><div class="spon-amt" style="color:var(--terra);">CAD 50 agreed · CAD 50 pending payment</div><div class="pw" style="margin-top:.45rem;"><div class="pm"><span>Rs. 18,000 raised</span><strong>Rs. 25,000 goal</strong></div><div class="pb"><div class="pf pp" style="width:72%"></div></div></div></div><span class="pill pill-p">Pending</span></div>
+      </div>
+    </div>
+
+    <!-- Recommended -->
+    <div style="padding:1.5rem 0 2.5rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.15rem;flex-wrap:wrap;gap:.8rem;">
+        <h3 style="font-family:var(--fd);font-size:1.38rem;font-weight:600;">More Projects to Support</h3>
+        <button class="btn btn-outline" style="font-size:.81rem;" onclick="go('projects')">See All →</button>
+      </div>
+      <div class="g3">
+        <div class="card" onclick="det('tuition')" style="cursor:pointer;"><div class="card-thumb" style="background:linear-gradient(135deg,#c8dfcc,#7ab888);">📖</div><div class="card-body"><span class="badge b-edu">Education</span><div class="card-title">Tuition Centre Fund — Mannar</div><div class="card-desc">Keep the centre running for 3 more months.</div><div class="pw"><div class="pm"><span>Rs. 45,000</span><strong>Rs. 75,000 goal</strong></div><div class="pb"><div class="pf" style="width:60%"></div></div></div></div></div>
+        <div class="card" onclick="det('microloan')" style="cursor:pointer;"><div class="card-thumb" style="background:linear-gradient(135deg,#fde8c0,#f0b040);">🌱</div><div class="card-body"><span class="badge b-biz">Micro-Business</span><div class="card-title">Micro-Loan Fund — Mannar</div><div class="card-desc">Revolving fund — your money helps multiple families.</div><div class="pw"><div class="pm"><span>Rs. 1,20,000</span><strong>Rs. 2,00,000 goal</strong></div><div class="pb"><div class="pf am" style="width:60%"></div></div></div></div></div>
+        <div class="card" onclick="det('family')" style="cursor:pointer;"><div class="card-thumb" style="background:linear-gradient(135deg,#fae0d8,#e08868);">🏡</div><div class="card-body"><span class="badge b-family">Family Support</span><div class="card-title">Family Care Fund — Mullaitivu</div><div class="card-desc">Food, medical &amp; bicycles for 4 families.</div><div class="pw"><div class="pm"><span>Rs. 38,000</span><strong>Rs. 60,000 goal</strong></div><div class="pb"><div class="pf" style="width:63%"></div></div></div></div></div>
+      </div>
+    </div>
+
+    <!-- Receipt -->
+    <div style="background:var(--teal-pale);border:1px solid var(--teal-light);border-radius:var(--r);padding:1.25rem 1.65rem;display:flex;align-items:center;gap:1rem;margin-bottom:3rem;flex-wrap:wrap;">
+      <div style="font-size:1.65rem;">🧾</div>
+      <div style="flex:1;"><div style="font-weight:600;font-size:.91rem;color:var(--teal-dark);">Your 2025 donation receipt is ready</div><div style="font-size:.78rem;color:var(--text-3);margin-top:.2rem;">Download your tax receipt for CAD 125 donated this year. Valid for Canadian tax filing.</div></div>
+      <button class="btn btn-teal" onclick="showToast('Receipt downloaded — check your Downloads folder!')">Download Receipt</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ MODAL ═══════ -->
+<div class="overlay" id="modal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal()">✕</button>
+    <div class="modal-title">Complete Sponsorship</div>
+    <div class="modal-sub">You are sponsoring <strong id="m-proj">this project</strong></div>
+    <div style="background:var(--teal-pale);border:1px solid var(--teal-light);border-radius:var(--rs);padding:.88rem 1.1rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-size:.84rem;color:var(--text-2);">Your contribution</span>
+      <strong style="font-family:var(--fd);font-size:1.2rem;color:var(--teal);" id="m-amt">CAD 25</strong>
+    </div>
+    <div class="fg"><label class="fl">Your Name</label><input class="fi" type="text" placeholder="Ananthan Murugan"/></div>
+    <div class="fg"><label class="fl">Email</label><input class="fi" type="email" placeholder="you@example.com"/></div>
+    <div class="fg"><label class="fl">Payment Method</label><select class="fs"><option>E-Transfer (Canada — Recommended)</option><option>PayPal</option><option>Bank Transfer (International)</option><option>Online Card Payment</option><option>Contact coordinator via WhatsApp</option></select></div>
+    <div class="fg"><label class="fl">Sponsorship Type</label><select class="fs"><option>One-time payment</option><option>Monthly recurring</option><option>Quarterly</option></select></div>
+    <button class="btn btn-amber btn-block" onclick="completeSponsor()">Confirm Sponsorship →</button>
+    <p style="font-size:.69rem;color:var(--text-3);text-align:center;margin-top:.58rem;">Receipt emailed after payment is verified by our coordinator</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+<!-- ═══════ SCRIPT ═══════ -->
+<script>
+function go(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.querySelectorAll('.nav-link').forEach(x=>x.classList.remove('active'));
+  const m={home:'nl-home',projects:'nl-projects'};
+  if(m[p])document.getElementById(m[p])?.classList.add('active');
+  setTimeout(animProg,300);
+}
+function fag(cat){go('projects');const t=document.querySelector(`.ftab[onclick="filt(this,'${cat}')"]`);if(t)filt(t,cat);}
+function animProg(){document.querySelectorAll('.pf').forEach(el=>{const w=el.style.width;el.style.width='0%';setTimeout(()=>el.style.width=w,200);});}
+setTimeout(animProg,500);
+
+function filt(btn,cat){
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  const cards=document.querySelectorAll('.pcard');let n=0;
+  cards.forEach(c=>{const s=cat==='all'||c.dataset.cat===cat;c.style.display=s?'':'none';if(s)n++;});
+  document.getElementById('proj-count').textContent=`Showing ${n} project${n!==1?'s':''} across Northern Sri Lanka`;
+}
+
+const PD={
+  student:{thumb:'🎒',bg:'linear-gradient(135deg,#d8eeee,#7acdcd)',badge:'<span class="badge b-edu">Education</span>',title:'One-to-One Student Sponsorship — Mannar &amp; Vanni',
+    meta:['📍 Mannar &amp; Vanni, Northern Sri Lanka','👤 21 sponsors so far','🗓️ Ongoing — open enrolment','🍁 Popular with Tamil Canadian sponsors'],
+    body:'This is Nesakkarangal\'s flagship programme. Each sponsor is matched with a named child in Mannar or Vanni — you receive their photo, school name, grade, and village. Your sponsorship covers one full academic year of tuition support, stationery, exam fees, and school supplies.<br/><br/>Many of these students are the first in their family to complete higher grades. Our local coordinators provide monthly progress updates and you can exchange letters through the Penpal extension of this programme.<br/><br/>All student records are maintained in our live Google Sheets dashboard — transparent and always up to date.',
+    needs:[{l:'Tuition centre fees (1 child × 12 months)',c:'CAD 40 / Rs. 8,000'},{l:'School stationery &amp; exercise books',c:'CAD 15 / Rs. 3,000'},{l:'Exam registration &amp; uniform assistance',c:'CAD 20 / Rs. 4,000'}],
+    pm:['21 of 40 spots filled','40 students need sponsors'],pw:'52%',sp:'21 people',rem:'19 spots open'},
+  penpal:{thumb:'✉️',bg:'linear-gradient(135deg,#d8e8ff,#8aabde)',badge:'<span class="badge b-edu">Education</span>',title:'Penpal Program — Canada ↔ Northern Sri Lanka',
+    meta:['📍 Canada ↔ Mannar / Vanni','👤 34 pairs matched','🗓️ Open enrolment — 16 spots left','🍁 Tamil Canadian initiative'],
+    body:'Connect a student in Canada with a child in Northern Sri Lanka through our structured Penpal programme. Students exchange letters — building empathy, language skills, and cultural understanding on both sides.<br/><br/>Tamil-Canadian families often use this programme to connect their children with cousins or community members in Sri Lanka. English exchanges have measurably improved writing skills in our Sri Lankan students.<br/><br/>Each pair is matched by age and class level. Coordinators provide translation support where needed.',
+    needs:[{l:'Coordination &amp; matching service',c:'Volunteer-based'},{l:'Postage &amp; printing (Sri Lanka side)',c:'CAD 5 / Rs. 1,000 per pair'},{l:'Annual programme admin',c:'CAD 10 / Rs. 2,000 per pair'}],
+    pm:['34 pairs matched','50 pairs goal'],pw:'68%',sp:'34 pairs active',rem:'16 spots open'},
+  tuition:{thumb:'📖',bg:'linear-gradient(135deg,#c8dfcc,#7ab888)',badge:'<span class="badge b-edu">Education</span>',title:'Tuition Centre Operating Fund — Mannar (Active)',
+    meta:['📍 Mannar, Northern Sri Lanka','👤 18 sponsors','🗓️ Status: Active (Nov 2025)','📚 Serving 40+ students daily'],
+    body:'The Mannar tuition centre serves over 40 students from low-income families every weekday evening — after-school coaching, exam preparation for O/L and A/L students, and a safe study environment.<br/><br/>This fund covers three months of operating costs — teacher stipends for two coordinators, stationery, electricity for evening classes, and printing of study materials.<br/><br/>The centre has been running since 2021 and has helped several students gain entry to national universities.',
+    needs:[{l:'Teacher stipend × 2 coordinators (3 months)',c:'Rs. 36,000'},{l:'Stationery &amp; printed study materials',c:'Rs. 15,000'},{l:'Electricity &amp; maintenance',c:'Rs. 12,000'},{l:'Exam registration fees (8 students)',c:'Rs. 12,000'}],
+    pm:['Rs. 45,000 raised','Rs. 75,000 goal'],pw:'60%',sp:'18 people',rem:'Rs. 30,000 needed'},
+  sewing:{thumb:'🧵',bg:'linear-gradient(135deg,#d2e8d8,#6baa88)',badge:'<span class="badge b-skill">Skills Development</span>',title:'Sewing Centre Launch — Mullaithivu',
+    meta:['📍 Mullaithivu, Northern Sri Lanka','👤 22 sponsors','🗓️ Opening: November 2025','👩 30 women in first batch'],
+    body:'Nesakkarangal is opening a new sewing training centre in Mullaithivu. The first batch of 30 women will be trained over 3 months in industrial sewing — focusing on school uniforms, household linen, and garments for local markets.<br/><br/>Women who graduate establish micro-businesses or join community sewing stores already operational in the region. This creates a self-sustaining local economy rather than dependency on aid.<br/><br/>Your sponsorship funds the initial equipment setup and first month of instructor fees and materials.',
+    needs:[{l:'4 industrial sewing machines',c:'Rs. 40,000'},{l:'Fabric rolls &amp; starter materials',c:'Rs. 20,000'},{l:'Instructor fee (Month 1)',c:'Rs. 15,000'},{l:'Furniture &amp; room setup',c:'Rs. 15,000'}],
+    pm:['Rs. 62,000 raised','Rs. 90,000 goal'],pw:'69%',sp:'22 people',rem:'Rs. 28,000 needed'},
+  women:{thumb:'👩',bg:'linear-gradient(135deg,#ece8f8,#bba8e4)',badge:'<span class="badge b-women">Women Empowerment</span>',title:"Women's Seed Fund — New Group, Vanni",
+    meta:['📍 Vanni, Northern Sri Lanka','👤 9 sponsors','🗓️ Starting: Dec 2025','👩 10 women in the group'],
+    body:"A new group of 10 women in Vanni are ready to start their micro-enterprise — producing palmyra leaf products, traditional handicrafts, and household items. They need a seed fund to purchase raw materials and initial equipment.<br/><br/>Nesakkarangal's model provides Rs. 2,500 per member. Groups that repay and grow can accumulate savings of up to Rs. 10 Lakhs — some of our earliest groups have reached this milestone.<br/><br/>A local coordinator monitors each group monthly and provides business guidance. Sponsor reports include group name, members, initial fund, and current balance.",
+    needs:[{l:'Seed fund for 10 members (Rs. 2,500 each)',c:'Rs. 25,000'},{l:'Raw materials — palmyra &amp; craft supplies',c:'Funded from seed'},{l:'Monthly coordinator visits (3 months)',c:'Volunteer-based'}],
+    pm:['Rs. 18,000 raised','Rs. 25,000 goal'],pw:'72%',sp:'9 people',rem:'Rs. 7,000 needed'},
+  microloan:{thumb:'🌱',bg:'linear-gradient(135deg,#fde8c0,#f0b040)',badge:'<span class="badge b-biz">Micro-Business</span>',title:'Micro-Loan Revolving Fund — Mannar District',
+    meta:['📍 Mannar, Northern Sri Lanka','👤 35 sponsors','🗓️ Status: Ongoing','🔄 Revolving — loans repaid &amp; redeployed'],
+    body:'This is our revolving micro-loan fund for small businesses in Mannar District. Unlike one-time donations, micro-loans are repaid and redeployed to the next business — meaning your contribution can help 2, 3, or more families over time.<br/><br/>We have supported 100+ businesses to date — vegetable vendors, tailors, small shops, and food producers. Each loan is accompanied by a basic business plan and monthly follow-up by our district coordinator.<br/><br/>Loans range from Rs. 5,000 to Rs. 25,000. Repayment rates are tracked and reported quarterly.',
+    needs:[{l:'New loan disbursements (5 families)',c:'Rs. 75,000'},{l:'Programme coordination &amp; follow-up',c:'Rs. 15,000'},{l:'Emergency top-up reserve',c:'Rs. 10,000'}],
+    pm:['Rs. 1,20,000 raised','Rs. 2,00,000 goal'],pw:'60%',sp:'35 people',rem:'Rs. 80,000 needed'},
+  family:{thumb:'🏡',bg:'linear-gradient(135deg,#fae0d8,#e08868)',badge:'<span class="badge b-family">Family Support</span>',title:'Family Care Fund — Mullaitivu, Vavuniya &amp; Malayagam',
+    meta:['📍 Mullaitivu · Vavuniya · Malayagam','👤 14 sponsors','🗓️ 4 Families Assisted (Oct 2025)','🏡 Includes Maveerar families'],
+    body:'This fund provides direct family support across multiple districts — families in immediate need. Support includes monthly food packs, medical supplies and eyeglasses, bicycles for students who travel long distances to school, and in some cases washroom construction and housing repairs.<br/><br/>We also respond to natural disasters and provide targeted support to Maveerar families. All families are identified and vetted by local district coordinators.<br/><br/>Detailed reports — family name, village, type of support, and date — are shared with sponsors after each disbursement.',
+    needs:[{l:'Monthly food packs (4 families × 3 months)',c:'Rs. 24,000'},{l:'Medical supplies &amp; eyeglasses',c:'Rs. 12,000'},{l:'Bicycles for school students (2)',c:'Rs. 14,000'},{l:'Emergency / housing assistance reserve',c:'Rs. 10,000'}],
+    pm:['Rs. 38,000 raised','Rs. 60,000 goal'],pw:'63%',sp:'14 people',rem:'Rs. 22,000 needed'}
+};
+
+function det(k){
+  const p=PD[k]||PD.student;
+  document.getElementById('d-thumb').style.background=p.bg;
+  document.getElementById('d-thumb').textContent=p.thumb;
+  document.getElementById('d-badge').innerHTML=p.badge;
+  document.getElementById('d-title').innerHTML=p.title;
+  document.getElementById('d-meta').innerHTML=p.meta.map(m=>`<span>${m}</span>`).join('');
+  document.getElementById('d-body').innerHTML=p.body;
+  document.getElementById('d-needs').innerHTML=`<h4 style="font-family:var(--fd);font-size:1.08rem;font-weight:600;margin-bottom:.75rem;">What the Funds Cover</h4>`+
+    p.needs.map(n=>`<div class="need-item"><div class="need-dot"></div>${n.l}<span style="margin-left:auto;color:var(--text-3);font-size:.76rem;white-space:nowrap;">${n.c}</span></div>`).join('');
+  document.getElementById('d-pm').innerHTML=`<span>${p.pm[0]}</span><strong>${p.pm[1]}</strong>`;
+  document.getElementById('d-pf').style.width=p.pw;
+  document.getElementById('d-sponsors').textContent=p.sp;
+  document.getElementById('d-rem').textContent=p.rem;
+  document.getElementById('m-proj').innerHTML=p.title.replace(/&amp;/g,'&').substring(0,45)+'…';
+  go('detail');
+}
+
+let selA='CAD 25';
+function sa(btn,v){
+  document.querySelectorAll('.amt-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');selA=v;
+  const cw=document.getElementById('customWrap');
+  if(v==='custom'){cw.style.display='block';document.getElementById('customInput').focus();}
+  else{cw.style.display='none';document.getElementById('m-amt').textContent=v;}
+}
+
+function openModal(){
+  if(selA==='custom'){const v=document.getElementById('customInput').value.trim();if(!v){showToast('Please enter a custom amount');return;}document.getElementById('m-amt').textContent=v;}
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+function completeSponsor(){closeModal();document.getElementById('dashSuccess').style.display='block';go('dashboard');showToast('🎉 Sponsorship confirmed — Thank you for supporting Northern Sri Lanka!');}
+function handleReg(e){e.preventDefault();document.getElementById('dashSuccess').style.display='block';go('dashboard');showToast('✅ Account created! Welcome to Nesakkarangal.');}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3800);}
+</script>
+</body>
+</html>
